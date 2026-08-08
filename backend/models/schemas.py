@@ -7,17 +7,38 @@ When adding a field here, add it there too.
 
 from sqlmodel import SQLModel, Field
 from sqlalchemy import Column, JSON
-from typing import Optional, List
+from typing import Optional, List, Any, Dict
 from datetime import datetime
 import uuid
+
+from pydantic import BaseModel, ConfigDict, field_validator
+
+
+# ─── Shared validation helpers ───────────────────────────────────────────────
+
+_MAX_TASK_LEN = 4000        # generous ceiling — rejects abusive multi-MB payloads
+_MAX_TEXT_LEN = 2000
+
+
+def _require_non_blank(value: str, field: str) -> str:
+    """Reject None / empty / whitespace-only strings with a clear message."""
+    if value is None or not str(value).strip():
+        raise ValueError(f"'{field}' must be a non-empty string")
+    return str(value).strip()
 
 
 # ─── Seller Agent (read-only, seeded from registry.py) ──────────────────────
 # Not stored in DB — served from in-memory list in registry.py
 
 class AgentCallRequest(SQLModel):
-    task: str
-    buyer_address: str
+    """Body for POST /agent/{id}/call — the buyer describing the task it wants."""
+    task: str = Field(..., min_length=1, max_length=_MAX_TASK_LEN)
+    buyer_address: str = Field(..., min_length=1)
+
+    @field_validator("task", "buyer_address")
+    @classmethod
+    def _not_blank(cls, v, info):
+        return _require_non_blank(v, info.field_name)
 
 
 class PaymentRequiredResponse(SQLModel):
@@ -29,10 +50,16 @@ class PaymentRequiredResponse(SQLModel):
 
 
 class PaymentVerifyRequest(SQLModel):
-    tx_id: str
-    session_id: str
-    seller_id: str
-    task: str
+    """Body for POST /payment/verify — proof that a TX was broadcast."""
+    tx_id: str = Field(..., min_length=1)
+    session_id: str = Field(..., min_length=1)
+    seller_id: str = Field(..., min_length=1)
+    task: str = Field(..., min_length=1, max_length=_MAX_TASK_LEN)
+
+    @field_validator("tx_id", "session_id", "seller_id", "task")
+    @classmethod
+    def _not_blank(cls, v, info):
+        return _require_non_blank(v, info.field_name)
 
 
 class PaymentVerifyResponse(SQLModel):
@@ -44,15 +71,32 @@ class PaymentVerifyResponse(SQLModel):
 
 
 class TaskExecuteRequest(SQLModel):
-    seller_id: str
-    task: str
-    tx_hash: str
+    """Body for POST /agent/{id}/execute — the paid task to run."""
+    seller_id: str = Field(..., min_length=1)
+    task: str = Field(..., min_length=1, max_length=_MAX_TASK_LEN)
+    tx_hash: str = ""
+
+    @field_validator("seller_id", "task")
+    @classmethod
+    def _not_blank(cls, v, info):
+        return _require_non_blank(v, info.field_name)
 
 
 class TaskResult(SQLModel):
-    result_type: str  # "text" | "chart" | "json"
+    result_type: str  # "text" | "chart" | "json" | "image"
     content: str
     chart_data: Optional[list] = None
+
+
+class ExecuteAgentResponse(BaseModel):
+    """Full envelope returned by POST /agent/{id}/execute."""
+    status: int = 200
+    agent_id: str
+    agent_name: str
+    task: str
+    tx_hash: str
+    result: TaskResult
+    execution_time_ms: Optional[int] = None
 
 
 # ─── Ledger Entry (SQLite table) ─────────────────────────────────────────────
@@ -74,16 +118,21 @@ class LedgerEntry(SQLModel, table=True):
 
 
 class LedgerEntryCreate(SQLModel):
-    buyer_id: str
-    buyer_name: str
-    seller_id: str
-    seller_name: str
-    price_algo: float
-    tx_hash: str
-    confirmation_time_ms: int
-    round_number: int
-    task: str
+    buyer_id: str = Field(..., min_length=1)
+    buyer_name: str = Field(..., min_length=1)
+    seller_id: str = Field(..., min_length=1)
+    seller_name: str = Field(..., min_length=1)
+    price_algo: float = Field(..., ge=0)
+    tx_hash: str = Field(..., min_length=1)
+    confirmation_time_ms: int = Field(..., ge=0)
+    round_number: int = Field(..., ge=0)
+    task: str = Field(..., min_length=1, max_length=_MAX_TASK_LEN)
     result: Optional[str] = None
+
+    @field_validator("buyer_id", "buyer_name", "seller_id", "seller_name", "tx_hash", "task")
+    @classmethod
+    def _not_blank(cls, v, info):
+        return _require_non_blank(v, info.field_name)
 
 
 # ─── API Keys (SQLite table) ─────────────────────────────────────────────────
@@ -123,15 +172,37 @@ class WebhookEndpoint(SQLModel, table=True):
 
 class WebhookEndpointCreate(SQLModel):
     id: Optional[str] = None
-    url: str
+    url: str = Field(..., min_length=1)
     description: str = "New endpoint"
     events: List[str] = Field(default_factory=list)
     status: str = "active"
     created_at: str
 
+    @field_validator("url")
+    @classmethod
+    def _valid_url(cls, v):
+        v = _require_non_blank(v, "url")
+        if not (v.startswith("http://") or v.startswith("https://")):
+            raise ValueError("'url' must start with http:// or https://")
+        return v
+
+    @field_validator("status")
+    @classmethod
+    def _valid_status(cls, v):
+        if v not in ("active", "disabled"):
+            raise ValueError("'status' must be 'active' or 'disabled'")
+        return v
+
 
 class WebhookEndpointPatch(SQLModel):
     status: Optional[str] = None
+
+    @field_validator("status")
+    @classmethod
+    def _valid_status(cls, v):
+        if v is not None and v not in ("active", "disabled"):
+            raise ValueError("'status' must be 'active' or 'disabled'")
+        return v
 
 
 class WebhookDelivery(SQLModel, table=True):
@@ -140,6 +211,11 @@ class WebhookDelivery(SQLModel, table=True):
     timestamp: str
     status: str = "success"          # "success" | "failed"
     response_code: int = 200
+    # Added for real delivery simulation (POST /webhooks/trigger). Nullable so
+    # pre-existing databases migrate cleanly via ADD COLUMN.
+    endpoint_id: Optional[str] = None
+    endpoint_url: Optional[str] = None
+    payload: Optional[str] = None
     created_at: str = Field(default_factory=lambda: datetime.utcnow().isoformat())
 
 
