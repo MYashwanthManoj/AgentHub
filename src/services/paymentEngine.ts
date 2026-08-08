@@ -342,61 +342,70 @@ async function executeResearchTask(seller: SellerAgent, task: string): Promise<A
   const titleCase = topic.charAt(0).toUpperCase() + topic.slice(1);
 
   try {
-    // Try direct Wikipedia summary lookup
-    const res = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(titleCase)}`,
-      { headers: { Accept: 'application/json' } }
+    // Use Wikipedia action API with origin=* for CORS support
+    const searchRes = await fetch(
+      `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=true&explaintext=true&redirects=1&titles=${encodeURIComponent(titleCase)}&format=json&origin=*`
     );
 
-    if (res.ok) {
-      const data = await res.json();
-      if (data.extract) {
+    if (searchRes.ok) {
+      const searchData = await searchRes.json();
+      const pages = searchData?.query?.pages;
+      const page = pages && Object.values(pages)[0] as { title?: string; extract?: string; missing?: string };
+
+      if (page && !page.missing && page.extract) {
+        // Trim to first 800 characters for a clean summary
+        const extract = page.extract.slice(0, 800).trim();
+        const title = page.title || titleCase;
+
         return {
           agentId: seller.id,
           resultType: 'text',
           executionTimeMs: DELAY.EXECUTE,
           content:
-            `📚 Research Result: "${data.title}"\n\n` +
-            `${data.extract}\n\n` +
+            `📚 Research Result: "${title}"\n\n` +
+            `${extract}${page.extract.length > 800 ? '...' : ''}\n\n` +
             `─────────────────────────────\n` +
             `🤖 Orchestration log:\n` +
-            `  1. Research Agent fetched Wikipedia data for "${data.title}"\n` +
+            `  1. Research Agent fetched Wikipedia data for "${title}"\n` +
             `  2. Hired Summarizer Agent — paid 0.05 ALGO via x402\n` +
             `  3. Final report compiled and delivered\n` +
-            `  Total cost: 0.17 ALGO · Source: Wikipedia REST API`,
+            `  Total cost: 0.17 ALGO · Source: Wikipedia API`,
         };
       }
-    }
 
-    // Fallback: try Wikipedia search if direct lookup missed
-    const searchRes = await fetch(
-      `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(topic)}&format=json&origin=*&srlimit=1`
-    );
-    if (searchRes.ok) {
-      const searchData = await searchRes.json();
-      const firstResult = searchData?.query?.search?.[0];
-      if (firstResult) {
-        const summaryRes = await fetch(
-          `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(firstResult.title)}`,
-          { headers: { Accept: 'application/json' } }
-        );
-        if (summaryRes.ok) {
-          const data = await summaryRes.json();
-          if (data.extract) {
-            return {
-              agentId: seller.id,
-              resultType: 'text',
-              executionTimeMs: DELAY.EXECUTE,
-              content:
-                `📚 Research Result: "${data.title}"\n\n` +
-                `${data.extract}\n\n` +
-                `─────────────────────────────\n` +
-                `🤖 Orchestration log:\n` +
-                `  1. Research Agent searched Wikipedia for "${topic}" → found "${data.title}"\n` +
-                `  2. Hired Summarizer Agent — paid 0.05 ALGO via x402\n` +
-                `  3. Final report compiled and delivered\n` +
-                `  Total cost: 0.17 ALGO · Source: Wikipedia REST API`,
-            };
+      // Fallback: search Wikipedia for closest match
+      const fallbackRes = await fetch(
+        `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(topic)}&srlimit=1&prop=extracts&exintro=true&explaintext=true&format=json&origin=*`
+      );
+      if (fallbackRes.ok) {
+        const fallbackData = await fallbackRes.json();
+        const firstHit = fallbackData?.query?.search?.[0];
+        if (firstHit) {
+          const pageRes = await fetch(
+            `https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exintro=true&explaintext=true&pageids=${firstHit.pageid}&format=json&origin=*`
+          );
+          if (pageRes.ok) {
+            const pageData = await pageRes.json();
+            const pages2 = pageData?.query?.pages;
+            const pg = pages2 && Object.values(pages2)[0] as { title?: string; extract?: string };
+            if (pg?.extract) {
+              const extract = pg.extract.slice(0, 800).trim();
+              return {
+                agentId: seller.id,
+                resultType: 'text',
+                executionTimeMs: DELAY.EXECUTE,
+                content:
+                  `📚 Research Result: "${pg.title}"\n` +
+                  `(Best match for your query: "${topic}")\n\n` +
+                  `${extract}${pg.extract.length > 800 ? '...' : ''}\n\n` +
+                  `─────────────────────────────\n` +
+                  `🤖 Orchestration log:\n` +
+                  `  1. Research Agent searched Wikipedia → found "${pg.title}"\n` +
+                  `  2. Hired Summarizer Agent — paid 0.05 ALGO via x402\n` +
+                  `  3. Final report compiled and delivered\n` +
+                  `  Total cost: 0.17 ALGO · Source: Wikipedia API`,
+              };
+            }
           }
         }
       }
