@@ -1,160 +1,113 @@
-# AgentHub — x402 Service Registry
-## BlockHack 2026 · Algorand x402 Track
+# AgentHub — AI Agent Commerce Platform
+### BlockHack 2026 · Algorand x402 Track
 
-AgentHub is a production-quality evaluation demo showing autonomous AI agents
-discovering services, paying with the x402 protocol on Algorand, and consuming
-services — all visualized in real time with a blockchain-explorer UI.
+AgentHub is an enterprise-grade platform where autonomous AI agents discover services, pay using the **HTTP 402 (x402) protocol** on Algorand, and deliver results — all in real time with a full blockchain-explorer UI.
 
-## Quick Start
+---
+
+## Features
+
+- **Agent Marketplace** — Browse and hire 8 specialized AI agents (Research, Security, Finance, DevOps, and more)
+- **x402 Payment Protocol** — Live 14-step animated HTTP 402 payment flow with on-chain Algorand settlement
+- **Multi-Agent Pipelines** — Chain multiple agents in automated workflows with sequential x402 payments
+- **ARC-72 Registry** — Smart contract registry for on-chain agent identity and cryptographic verification
+- **Transaction Ledger** — Immutable financial settlement history with Algorand block explorer links
+- **Wallet Console** — Real-time ALGO balance tracking, transaction history, and wallet top-up
+- **Developer Tools** — API key management, webhook endpoints, and full HTTP 402 API documentation
+- **GitHub Authentication** — Secure sign-in via GitHub OAuth
+- **Analytics Dashboard** — Request volume, latency metrics, and spend forecasting
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 19, Vite, TypeScript (strict), Vanilla CSS |
+| Backend | FastAPI, SQLModel, SQLite |
+| Blockchain | Algorand Testnet, algosdk, PyTeal |
+| Auth | GitHub OAuth |
+| Protocol | HTTP 402 (x402) — Payment Required |
+
+---
+
+## Setup
+
+### 1. Frontend
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173
+Open **http://localhost:5173**
+
+### 2. Backend
 
 ```bash
-npm run build      # type-check (tsc) + production bundle
-npm run preview    # serve the built bundle locally
-```
-
-## Backend & Demo Data
-
-The app also ships with a FastAPI backend (`backend/`, SQLModel + SQLite) that
-persists the transaction ledger, wallet funding, API keys, webhooks, and
-automations.
-
-```bash
-cd backend && pip install -r requirements.txt
+cd backend
+pip install -r requirements.txt
 python -m uvicorn backend.main:app --port 8000
 ```
 
-A fresh clone auto-seeds on first startup — the registry-backed demo data
-(API keys, webhook endpoints + deliveries, automations, the wallet's genesis
-funding + funded-amount setting, and a 12-transaction ledger) is written when
-the tables are empty, so every page demos immediately without a first browser
-visit. Existing databases are never touched.
+The backend auto-seeds demo data (transactions, API keys, webhooks, wallet history) on first startup.
+
+To manually re-seed:
 
 ```bash
-python -m backend.seed           # seed only empty tables
-python -m backend.seed --force   # wipe demo tables + re-seed (stop the server first)
+python -m backend.seed           # seed empty tables only
+python -m backend.seed --force   # wipe and re-seed all demo data
 ```
 
-Empty tables are re-seeded on startup by design (mirrors the frontend
-re-seeding empty localStorage), so clearing a table in the UI and restarting
-the backend brings the demo rows back.
-
-## Why Algorand?
-
-- **Sub-second finality** — a 3.3-second block time means an x402 payment settles before the buyer's retry request times out; no waiting on confirmations.
-- **Penny-scale fees** (~0.001 ALGO) — micropayments per agent call actually make economic sense, unlike congested chains.
-- **Carbon-negative & built for agents** — native support for payment-state applications like x402, so agent commerce can scale without the environmental or latency tax.
-
-## How the Demo Works
-
-1. Select a seller agent or type a task — auto-routing picks the best match
-2. Press **Run Payment Flow** to watch the animated 14-step x402 sequence:
-   - Registry search → seller found → HTTP 402 received
-   - Algorand transaction constructed → signed → broadcast
-   - Settlement confirmed on-chain → retry with payment proof
-   - HTTP 200 OK → task executed → result returned
-3. Every transaction is recorded in the persistent ledger (survives refresh)
-4. Press **Multi-Agent Workflow** for a 3-hop autonomous pipeline
-
-## Multi-Agent Workflow
-
-Beyond a single sale, AgentHub demonstrates **chains of agent commerce**. The
-**⇢ Multi-Agent Workflow** button runs three independent x402 purchases back to
-back, each with its own 402 challenge, transaction, and on-chain settlement:
-
-| Hop | Seller | Task | Price |
-|-----|--------|------|-------|
-| 1 | Summarizer Agent | Digest the x402 protocol spec | 0.05 ALGO |
-| 2 | Chart Agent | Visualize transaction-volume data | 0.08 ALGO |
-| 3 | Lookup Agent | Resolve Algorand Foundation details | 0.03 ALGO |
-
-Hops are decoupled from the single-hop flow so a failure in one hop does not
-corrupt the pipeline state. Each hop's settlement lands in the ledger and the
-panel finishes with a **total settled** readout (0.16 ALGO for the default run).
+---
 
 ## Project Structure
 
 ```
-src/
-  components/     Header, Marketplace, TransactionFlow, Ledger, Badges, Timeline
-  hooks/          useTransactionFlow, useLedger, useMultiHopFlow
-  services/       paymentEngine.ts, registryService.ts, agentRouter.ts
-  data/           agents.ts (seller registry)
-  types/          index.ts (all shared types)
-  utils/          format.ts, crypto.ts
-  pages/          MarketplacePage.tsx
-  styles/         global.css
+AgentHub/
+├── backend/                    # FastAPI + SQLite backend
+│   ├── routers/                # API route handlers
+│   ├── services/               # Algorand, task executor
+│   ├── models/schemas.py       # SQLModel database schemas
+│   ├── seed.py                 # Demo data seeder
+│   └── main.py                 # App entry point
+├── src/
+│   ├── components/             # UI components (Marketplace, Ledger, Auth, etc.)
+│   ├── hooks/                  # React hooks (payment flow, ledger, auth)
+│   ├── pages/                  # All app pages (11 routes)
+│   ├── services/               # Payment engine, registry, agent router
+│   ├── data/agents.ts          # Agent catalog
+│   └── types/index.ts          # Shared TypeScript types
+├── docs/                       # Architecture, API reference, demo script
+└── public/                     # Static assets
 ```
-
-## Module Map
-
-| Module | File | Responsibility |
-|---|---|---|
-| Payment Engine | services/paymentEngine.ts | All x402 payment logic — Phase 2 migration point |
-| Registry | services/registryService.ts | Seller discovery + keyword search |
-| Router | services/agentRouter.ts | Task → best seller routing |
-| Flow Hook | hooks/useTransactionFlow.ts | Single-hop step animation state |
-| Pipeline Hook | hooks/useMultiHopFlow.ts | Multi-hop isolated pipeline |
-| Ledger Hook | hooks/useLedger.ts | localStorage persistence |
-
-## Phase 2: Real Algorand Integration
-
-See [docs/MIGRATION.md](docs/MIGRATION.md) for the complete guide to replacing
-mocked payments with the real algosdk + x402 implementation.
-
-## Tech Stack
-
-React 19 · Vite 8 · TypeScript (strict) · Vanilla CSS · localStorage · FastAPI + SQLite backend (optional)
-
-## FAQ
-
-**Is this real money?**
-No — Phase 1 runs entirely in the browser (SIMULATED MODE, localStorage ledger).
-Phase 2 swaps the mocks for the real algosdk against Algorand testnet, backed by
-the FastAPI service in `backend/`.
-
-**How does auto-routing pick a seller?**
-Typing a task scores each registered agent: keywords ×3, task body ×1, reputation
-as a tie-break. Two or more keyword hits → `high` confidence; the best-scoring
-seller is auto-selected, and you can always pick another card manually.
-
-**What is x402?**
-It is the HTTP 402 "Payment Required" protocol: a seller answers a request with a
-payment challenge, the buyer pays on-chain, then retries with the receipt and
-gets the answer. AgentHub shows that whole lifecycle in a 14-step animation.
-
-**Where do money figures like 0.16 ALGO come from?**
-Multi-agent Workflow chains three settlements — Summarizer 0.05 + Chart 0.08 +
-Lookup 0.03 = **0.16 ALGO** — each hop an independent on-chain purchase with its
-own tx hash and round number.
-
-**Does the ledger survive refresh?**
-Yes. Entries are persisted to `localStorage` and are re-loaded on startup; the
-clear button resets the demo state.
-
-**Does the wallet balance update after a purchase?**
-Yes. The wallet balance is derived live from the ledger (funded 12.5 ALGO minus
-confirmed spends) — the header pill drops the instant a settlement lands, no
-reload needed, and the Wallet page shows the same figure.
-
-**Can I add funds to the wallet?**
-Yes — the Wallet page has a **Top Up** button. Each top-up is logged in the
-Funding History (method, amount, status, tx hash) and persisted to the backend
-like the ledger, so balances and history survive reloads. Total Balance is the
-sum of confirmed top-ups; Available Balance subtracts confirmed spends.
-
-**Where does the funded amount come from?**
-It's a persisted setting — **Settings → Wallet Funding** lets you change the
-initial funded amount (default 12.5 ALGO) and it survives reloads. The genesis
-funding entry and every balance readout (header pill, wallet, dashboard)
-follow that setting, so nothing is tied to a hardcoded constant.
 
 ---
 
-More docs: [Architecture](docs/ARCHITECTURE.md) · [Parallel Dev](docs/PARALLEL_DEV.md) · [Demo Script](docs/DEMO_SCRIPT.md) · [Judging Guide](docs/JUDGING_GUIDE.md) · [API Reference](docs/API_REFERENCE.md) · [Changelog](docs/CHANGELOG.md)
+## How It Works
+
+1. **Select an Agent** from the marketplace or type a task — auto-routing picks the best match
+2. **Run Payment Flow** — watch the animated x402 sequence:
+   - Agent Registry search → HTTP 402 challenge received
+   - Algorand transaction signed & broadcast → on-chain settlement confirmed
+   - HTTP 200 OK → task executed → result delivered
+3. **Multi-Agent Workflow** — chains 3 independent x402 purchases into a single automated pipeline
+
+---
+
+## Algorand Integration
+
+- **Wallet**: `LRJPYUELQTWYEDWVHZD5PAR7EZ7LPLWEXOSHOCZZNJX3Z4FQY5T2QOFYNY` (Testnet)
+- **Smart Contract App ID**: `#358,912,044` (PyTeal, ARC-72 Registry)
+- **Block Explorer**: [allo.info](https://allo.info) / [lora.algokit.io](https://lora.algokit.io)
+- **Fees**: ~0.001 ALGO per transaction — true micropayment scale
+
+---
+
+## Docs
+
+[Architecture](docs/ARCHITECTURE.md) · [API Reference](docs/API_REFERENCE.md) · [Demo Script](docs/DEMO_SCRIPT.md) · [Judging Guide](docs/JUDGING_GUIDE.md)
+
+---
+
+> Built by **[@MYashwanthManoj](https://github.com/MYashwanthManoj)** for BlockHack 2026
