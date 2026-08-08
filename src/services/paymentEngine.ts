@@ -322,12 +322,24 @@ export async function executeTask(seller: SellerAgent, task: string): Promise<Ag
     return executeMarketTask(seller, task);
   }
   if (seller.category === 'qr') {
-    const text = task.replace(/^(generate|create|make|qr|code|for)\s*/gi, '').trim() || task;
-    const url = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=300x300&margin=10&format=png`;
+    const text = task.replace(/^(generate|create|make|qr for|qr code for)\s*/gi, '').trim() || task;
+    const url = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=300x300&margin=10`;
     return { agentId: seller.id, resultType: 'image', executionTimeMs: DELAY.EXECUTE, content: url };
   }
   if (seller.category === 'weather') {
-    return executeWeatherTask(seller, task);
+    const city = task.replace(/^(weather|in|for|at|weather in|weather for)\s*/gi, '').trim() || 'London';
+    try {
+      const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
+      if (res.ok) {
+        const d = await res.json();
+        const cur = d.current_condition?.[0];
+        if (cur) return {
+          agentId: seller.id, resultType: 'text', executionTimeMs: DELAY.EXECUTE,
+          content: `🌤️ Weather: ${city}\n🌡️ ${cur.temp_C}°C  💧 ${cur.humidity}%  💨 ${cur.windspeedKmph}km/h\n☁️ ${cur.weatherDesc?.[0]?.value}\n🤖 Paid 0.02 ALGO via x402`,
+        };
+      }
+    } catch(_) {}
+    return { agentId: seller.id, resultType: 'text', executionTimeMs: DELAY.EXECUTE, content: `🌤️ Weather for ${city}: API unavailable. Paid 0.02 ALGO via x402.` };
   }
   // ────────────────────────────────────────────────────────────────────────
 
@@ -482,38 +494,6 @@ async function executeMarketTask(seller: SellerAgent, task: string): Promise<Age
       `🟢 Solana    (SOL)   $145.00  ▲ 1.50% (24h)\n` +
       `─────────────────────────────\n` +
       `🤖 AI-to-AI: Market Agent hired Chart + Sentiment agents via x402 · Total: 0.21 ALGO`,
-  };
-}
-
-
-/** Scenario 3: Weather Intelligence — fetches live conditions from wttr.in */
-async function executeWeatherTask(seller: SellerAgent, task: string): Promise<AgentResult> {
-  const city = task.replace(/^(weather|in|for|at|what is the weather|how is the weather)\s*/gi, '').trim() || 'London';
-  try {
-    const res = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
-    if (res.ok) {
-      const d = await res.json();
-      const cur = d.current_condition?.[0];
-      if (cur) {
-        return {
-          agentId: seller.id, resultType: 'text', executionTimeMs: DELAY.EXECUTE,
-          content:
-            `🌤️ Weather Report: ${city.charAt(0).toUpperCase() + city.slice(1)}\n` +
-            `─────────────────────────────\n` +
-            `🌡️ Temperature: ${cur.temp_C}°C / ${cur.temp_F}°F\n` +
-            `💧 Humidity:    ${cur.humidity}%\n` +
-            `💨 Wind:        ${cur.windspeedKmph} km/h ${cur.winddir16Point}\n` +
-            `☁️ Condition:   ${cur.weatherDesc?.[0]?.value}\n` +
-            `👁️ Visibility:  ${cur.visibility} km\n` +
-            `─────────────────────────────\n` +
-            `🤖 Weather Agent hired via x402 · Paid 0.02 ALGO on Algorand`,
-        };
-      }
-    }
-  } catch (_) { /* fall through */ }
-  return {
-    agentId: seller.id, resultType: 'text', executionTimeMs: DELAY.EXECUTE,
-    content: `🌤️ Weather for ${city}: Unable to fetch live data. Service temporarily unavailable.\n🤖 Paid 0.02 ALGO via x402 on Algorand`,
   };
 }
 
