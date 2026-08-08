@@ -96,6 +96,17 @@ export const SELLER_AGENTS: SellerAgent[] = [
     endpoint: 'https://agents.example.com/translator/v1',
     keywords: ['translate', 'language', 'locale', 'multilingual', 'spanish', 'japanese', 'chinese', 'german'],
   },
+  {
+    id: 'agent-image-01',
+    name: 'Image Generator Agent',
+    description:
+      'Generates high-quality AI images from text prompts using diffusion models. Instant visual output, pay-per-image via x402.',
+    priceAlgo: 0.10,
+    reputation: 96,
+    category: 'image',
+    endpoint: 'https://image.pollinations.ai/prompt',
+    keywords: ['image', 'generate', 'picture', 'photo', 'art', 'draw', 'create', 'visual', 'diffusion', 'ai art'],
+  },
 ];
 
 export const BUYER_AGENT: BuyerAgent = {

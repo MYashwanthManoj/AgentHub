@@ -33,6 +33,7 @@ export function ResultPanel({ result, txHash }: ResultPanelProps) {
         {result.resultType === 'chart' && result.chartData && (
           <ChartResult data={result.chartData} />
         )}
+        {result.resultType === 'image' && <ImageResult url={result.content} />}
       </div>
     </div>
   );
@@ -104,6 +105,40 @@ function ChartResult({ data }: { data: { label: string; value: number }[] }) {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function ImageResult({ url }: { url: string }) {
+  return (
+    <div className="result-image-wrapper">
+      <div className="result-image__label mono text-xs text-muted" style={{ marginBottom: '10px' }}>
+        🎨 AI-generated image · powered by Pollinations.ai · paid via x402
+      </div>
+      <img
+        src={url}
+        alt="AI Generated"
+        className="result-image"
+        loading="lazy"
+        onLoad={(e) => { (e.target as HTMLImageElement).style.opacity = '1'; }}
+        onError={(e) => {
+          const el = e.target as HTMLImageElement;
+          el.style.display = 'none';
+          el.parentElement!.insertAdjacentHTML('beforeend',
+            '<p style="color:var(--color-error,#f87171);padding:12px">Image generation failed — check your internet connection and try again.</p>'
+          );
+        }}
+        style={{ opacity: 0, transition: 'opacity 0.5s ease', maxWidth: '100%', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}
+      />
+      <a
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="result-image__download mono text-xs"
+        style={{ display: 'inline-block', marginTop: '10px', color: 'var(--color-accent, #818cf8)' }}
+      >
+        ↗ Open full image
+      </a>
     </div>
   );
 }

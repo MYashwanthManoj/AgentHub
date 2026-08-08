@@ -389,6 +389,18 @@ function generateMockResult(seller: SellerAgent, task: string): AgentResult {
         executionTimeMs,
         content: JSON.stringify(generateLookupPayload(task), null, 2),
       };
+    case 'image': {
+      // Build a Pollinations.ai URL — free, no API key, returns a real image
+      const encodedPrompt = encodeURIComponent(task.replace(/^generate|^create|^draw|^make/i, '').trim() || task);
+      const seed = Math.floor(Math.random() * 99999);
+      const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=512&height=512&seed=${seed}&nologo=true`;
+      return {
+        agentId: seller.id,
+        resultType: 'image',
+        executionTimeMs,
+        content: imageUrl,
+      };
+    }
     default:
       return {
         agentId: seller.id,

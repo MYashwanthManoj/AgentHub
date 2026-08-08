@@ -129,8 +129,8 @@ export interface LedgerEntry {
 
 export interface AgentResult {
   agentId: string;
-  resultType: 'text' | 'chart' | 'json';
-  content: string; // for text / JSON
+  resultType: 'text' | 'chart' | 'json' | 'image';
+  content: string; // for text / JSON / image URL
   chartData?: ChartDataPoint[]; // for chart
   executionTimeMs: number;
 }
