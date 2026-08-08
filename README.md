@@ -16,7 +16,7 @@ AI agents can reason, plan, and call tools, but they still struggle to independe
 
 ## Features
 
-### 11 paid AI services
+### 11 registry-backed paid AI services
 
 - **Summarizer Agent — 0.05 ALGO:** compresses documents and research into concise summaries, with optional OpenAI or Gemini execution.
 - **Chart Agent — 0.08 ALGO:** turns task context and data into structured, renderable chart series.
@@ -29,6 +29,8 @@ AI agents can reason, plan, and call tools, but they still struggle to independe
 - **Image Generator Agent — 0.10 ALGO:** generates an image from a prompt through a pay-per-image x402 service.
 - **Research Orchestrator Agent — 0.12 ALGO:** retrieves live Wikipedia knowledge and coordinates a Summarizer Agent to produce a report.
 - **Market Intelligence Agent — 0.09 ALGO:** retrieves live CoinGecko prices and coordinates Chart and Sentiment agents for market analysis.
+
+The frontend also includes two experimental client-side utility integrations—**QR Code Generator Agent (0.03 ALGO)** and **Weather Intelligence Agent (0.02 ALGO)**. They use QRServer and wttr.in with deterministic fallbacks; the stable FastAPI/ARC registry documented below remains the requested 11-service catalog.
 
 ### Platform capabilities
 
@@ -82,7 +84,7 @@ The React client owns task selection and wallet-facing flow orchestration. FastA
 | Blockchain | Algorand Testnet, `py-algorand-sdk` 2.7, Algonode, Lora | Payment construction/verification boundary, finality, balances, and explorer proof |
 | Commerce protocol | HTTP 402 / x402 | Machine-readable price challenge and proof-gated service execution |
 | Agent execution | Deterministic executors, OpenAI REST, Gemini REST | Paid task output with resilient fallback behavior |
-| Live data | Wikipedia API, CoinGecko API, Pollinations | Research, market intelligence, and image-generation scenarios |
+| Live data | Wikipedia, CoinGecko, Pollinations, QRServer, wttr.in | Research, market, image, QR-code, and weather scenarios |
 | Networking | HTTPX 0.27, browser Fetch API | Backend LLM calls and frontend API integrations |
 | Deployment | Vercel, Render Blueprint | Static frontend plus Python API/WebSocket services |
 
@@ -231,7 +233,7 @@ Default local base URL: `http://localhost:8000`. FastAPI may redirect slashless 
 | Research Orchestrator Agent | `agent-researcher-01` | `researcher` | 0.12 ALGO | `POST /agent/agent-researcher-01/call` |
 | Market Intelligence Agent | `agent-market-01` | `market` | 0.09 ALGO | `POST /agent/agent-market-01/call` |
 
-The frontend catalog contains all 11 services above. The current FastAPI registry seed contains the eight core local executors; the client starts from the complete static catalog and hydrates from the API when available. A production release should make the ARC-72 contract/indexer the single registry source of truth. Detailed capabilities and sample outputs are in [AGENTS.md](AGENTS.md).
+The FastAPI registry contains all 11 stable services above, and the frontend normalizes them into the same searchable `SellerAgent` shape. Two additional experimental frontend utilities (QR and weather) are not yet part of the backend registry. A production release should make the ARC-72 contract/indexer the single source of truth for stable and experimental listings alike. Detailed capabilities and sample outputs for the requested 11-agent registry are in [AGENTS.md](AGENTS.md).
 
 ## Deployment
 

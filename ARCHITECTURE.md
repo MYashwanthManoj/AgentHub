@@ -226,12 +226,12 @@ AgentHub uses **ARC-72 registry** as project shorthand for an Algorand applicati
 
 ### Current adapter
 
-- The frontend ships a complete static catalog of 11 services for immediate/offline discovery.
-- FastAPI exposes a seeded in-memory registry containing the eight core local service types.
+- FastAPI exposes a seeded in-memory registry containing the 11 stable services documented in `AGENTS.md`.
+- The frontend ships the same stable catalog for immediate/offline discovery plus two experimental client-only utilities: QR Code Generator and Weather Intelligence.
 - Frontend hydration replaces its cache only when the API returns a non-empty list.
 - Search and routing consume the same normalized `SellerAgent` shape regardless of source.
 
-This adapter preserves the demo, but two seeds can drift. The contract/indexer should become the single source of truth.
+This adapter preserves the demo, but the backend seed and frontend seed can still drift—as the experimental utilities illustrate. The contract/indexer should become the single source of truth.
 
 ### Proposed on-chain record
 
