@@ -125,6 +125,26 @@ export const SELLER_AGENTS: SellerAgent[] = [
     endpoint: 'https://api.coingecko.com/api/v3/simple/price',
     keywords: ['crypto', 'price', 'market', 'algo', 'bitcoin', 'ethereum', 'solana', 'coin', 'trading', 'finance'],
   },
+  {
+    id: 'agent-qr-01',
+    name: 'QR Code Generator Agent',
+    description: 'Converts any URL, wallet address, or text into a scannable QR code instantly. Free, instant, pay-per-use via x402.',
+    priceAlgo: 0.03,
+    reputation: 99,
+    category: 'qr',
+    endpoint: 'https://api.qrserver.com/v1/create-qr-code',
+    keywords: ['qr', 'code', 'scan', 'barcode', 'url', 'wallet', 'link', 'generate'],
+  },
+  {
+    id: 'agent-weather-01',
+    name: 'Weather Intelligence Agent',
+    description: 'Fetches live weather conditions for any city worldwide. Returns temperature, humidity, wind, and forecast data.',
+    priceAlgo: 0.02,
+    reputation: 94,
+    category: 'weather',
+    endpoint: 'https://wttr.in',
+    keywords: ['weather', 'temperature', 'rain', 'forecast', 'city', 'climate', 'wind', 'humidity'],
+  },
 ];
 
 export const BUYER_AGENT: BuyerAgent = {
