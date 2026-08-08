@@ -36,6 +36,7 @@ from sqlmodel import Session, SQLModel, select
 
 from backend.db import engine
 from backend.models.schemas import (
+    Agent,
     ApiKey,
     Automation,
     AutomationRun,
@@ -52,6 +53,151 @@ def _fake_tx_hash(seed: str) -> str:
     """Deterministic id matching the app's established ALGO_TX_<hex> format
     (20 chars — the transactions UI is styled around this length)."""
     return "ALGO_TX_" + hashlib.sha256(seed.encode()).hexdigest()[:12].upper()
+
+
+# ─── Agent registry ──────────────────────────────────────────────────────────
+# All 13 registered seller agents (mirrors the in-memory AGENTS list in
+# backend/routers/registry.py and the frontend's src/data/agents.ts).
+
+def _seed_agents(session: Session) -> int:
+    if session.exec(select(Agent)).first() is not None:
+        return 0
+    session.add_all(
+        [
+            Agent(
+                id="agent-summarizer-01",
+                name="Summarizer Agent",
+                description="Compresses long documents into concise, accurate summaries. Ideal for research digestion and content pipelines.",
+                price_algo=0.05,
+                category="summarizer",
+                endpoint="https://agents.example.com/summarizer/v1",
+                reputation=97,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-chart-01",
+                name="Chart Agent",
+                description="Transforms raw data arrays into publication-ready charts. Returns structured chart-data for rendering.",
+                price_algo=0.08,
+                category="chart",
+                endpoint="https://agents.example.com/chart/v1",
+                reputation=94,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-lookup-01",
+                name="Lookup Agent",
+                description="Queries structured knowledge stores and returns type-safe JSON payloads. Supports entity resolution.",
+                price_algo=0.03,
+                category="lookup",
+                endpoint="https://agents.example.com/lookup/v1",
+                reputation=92,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-code-auditor-01",
+                name="Code Auditor Agent",
+                description="Scans smart contracts and TypeScript repos for security vulnerabilities, race conditions, and gas leaks.",
+                price_algo=0.12,
+                category="auditor",
+                endpoint="https://agents.example.com/auditor/v1",
+                reputation=98,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-sentiment-01",
+                name="Sentiment Analyzer Agent",
+                description="Performs real-time financial market sentiment analysis across news feeds and social data streams.",
+                price_algo=0.04,
+                category="analytics",
+                endpoint="https://agents.example.com/sentiment/v1",
+                reputation=91,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-extractor-01",
+                name="Data Extractor Agent",
+                description="Parses unstructured PDFs, HTML, and invoices into strictly typed JSON schemas with 99.9% accuracy.",
+                price_algo=0.06,
+                category="extractor",
+                endpoint="https://agents.example.com/extractor/v1",
+                reputation=95,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-security-01",
+                name="Security Sentinel Agent",
+                description="Monitors contracts for abnormal transaction spikes, exploit patterns, and wallet drains.",
+                price_algo=0.15,
+                category="security",
+                endpoint="https://agents.example.com/security/v1",
+                reputation=99,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-translator-01",
+                name="Language Translator Agent",
+                description="Provides high-speed neural translation across 50+ languages with technical domain term preservation.",
+                price_algo=0.05,
+                category="translator",
+                endpoint="https://agents.example.com/translator/v1",
+                reputation=93,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-image-01",
+                name="Image Generator Agent",
+                description="Generates high-quality AI images from text prompts using diffusion models. Instant visual output, pay-per-image via x402.",
+                price_algo=0.10,
+                category="image",
+                endpoint="https://image.pollinations.ai/prompt",
+                reputation=96,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-researcher-01",
+                name="Research Orchestrator Agent",
+                description="Fetches real Wikipedia knowledge on any topic, then autonomously hires a Summarizer Agent via x402 to distill and structure the findings.",
+                price_algo=0.12,
+                category="researcher",
+                endpoint="https://en.wikipedia.org/api/rest_v1/page/summary",
+                reputation=97,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-market-01",
+                name="Market Intelligence Agent",
+                description="Fetches live crypto prices (ALGO, BTC, ETH, SOL) from CoinGecko, then hires agents via x402 to visualize market trends.",
+                price_algo=0.09,
+                category="market",
+                endpoint="https://api.coingecko.com/api/v3/simple/price",
+                reputation=95,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-qr-01",
+                name="QR Code Generator Agent",
+                description="Converts any URL, wallet address, or text into a scannable QR code image instantly. Free, instant, pay-per-use via x402.",
+                price_algo=0.03,
+                category="qr",
+                endpoint="https://api.qrserver.com/v1/create-qr-code",
+                reputation=99,
+                is_verified=True,
+            ),
+            Agent(
+                id="agent-weather-01",
+                name="Weather Intelligence Agent",
+                description="Fetches live weather conditions for any city worldwide. Temperature, humidity, wind speed, and forecast.",
+                price_algo=0.02,
+                category="weather",
+                endpoint="https://wttr.in",
+                reputation=94,
+                is_verified=True,
+            ),
+        ]
+    )
+    session.commit()
+    return 13
 
 
 # ─── API keys ────────────────────────────────────────────────────────────────
@@ -362,12 +508,13 @@ def seed_demo_data(session: Session, force: bool = False) -> Dict[str, int]:
     """Seed demo tables. Only empty tables are seeded unless force=True
     (which wipes the demo tables first — a clean-slate demo reset)."""
     if force:
-        for model in (ApiKey, WebhookEndpoint, WebhookDelivery, Automation, AutomationRun, LedgerEntry, WalletFunding, WalletSettings):
+        for model in (Agent, ApiKey, WebhookEndpoint, WebhookDelivery, Automation, AutomationRun, LedgerEntry, WalletFunding, WalletSettings):
             for row in session.exec(select(model)).all():
                 session.delete(row)
         session.commit()
 
     counts: Dict[str, int] = {
+        "agents": _seed_agents(session),
         "api_keys": _seed_api_keys(session),
         "webhook_endpoints": _seed_webhook_endpoints(session),
         "webhook_deliveries": _seed_webhook_deliveries(session),
@@ -388,7 +535,7 @@ def main() -> None:
     parser.add_argument(
         "--force",
         action="store_true",
-        help="Wipe the demo tables (api keys, webhooks, automations, ledger, wallet funding/settings) and re-seed.",
+        help="Wipe the demo tables (agents, api keys, webhooks, automations, ledger, wallet funding/settings) and re-seed.",
     )
     args = parser.parse_args()
 

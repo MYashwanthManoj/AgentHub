@@ -131,6 +131,28 @@ AGENTS = [
         "walletAddress": "MRKT7X3KFAKEADDRESSALGORAND1234567890ABCDEF",
         "tags": ["crypto", "price", "market", "algo", "bitcoin", "ethereum", "solana", "trading"],
     },
+    {
+        "id": "agent-qr-01",
+        "name": "QR Code Generator Agent",
+        "description": "Converts any URL, wallet address, or text into a scannable QR code image instantly. Free, instant, pay-per-use via x402.",
+        "category": "qr",
+        "priceAlgo": 0.03,
+        "reputationScore": 99,
+        "endpoint": "https://api.qrserver.com/v1/create-qr-code",
+        "walletAddress": "QRGEN7X3KFAKEADDRESSALGORAND1234567890ABCDE",
+        "tags": ["qr", "code", "scan", "barcode", "url", "wallet", "link", "generate"],
+    },
+    {
+        "id": "agent-weather-01",
+        "name": "Weather Intelligence Agent",
+        "description": "Fetches live weather conditions for any city worldwide. Temperature, humidity, wind speed, and forecast.",
+        "category": "weather",
+        "priceAlgo": 0.02,
+        "reputationScore": 94,
+        "endpoint": "https://wttr.in",
+        "walletAddress": "WTHR7X3KFAKEADDRESSALGORAND1234567890ABCDE",
+        "tags": ["weather", "temperature", "rain", "forecast", "city", "climate", "wind", "humidity"],
+    },
 ]
 
 
@@ -138,6 +160,16 @@ AGENTS = [
 async def get_registry():
     """Return all registered seller agents."""
     return AGENTS
+
+
+@router.get("/categories")
+async def get_registry_categories():
+    """Return all unique categories with the count of agents in each."""
+    counts: dict = {}
+    for agent in AGENTS:
+        category = agent["category"]
+        counts[category] = counts.get(category, 0) + 1
+    return counts
 
 
 @router.get("/{agent_id}", response_model=dict)

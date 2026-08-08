@@ -27,8 +27,20 @@ def _require_non_blank(value: str, field: str) -> str:
     return str(value).strip()
 
 
-# ─── Seller Agent (read-only, seeded from registry.py) ──────────────────────
-# Not stored in DB — served from in-memory list in registry.py
+# ─── Seller Agent (DB-backed registry table) ─────────────────────────────────
+# Seeded from seed.py (13 agents) and mirrored by the in-memory AGENTS list in
+# registry.py so the API stays available even before the DB is seeded.
+
+class Agent(SQLModel, table=True):
+    """A registered seller agent in the AgentHub registry."""
+    id: str = Field(primary_key=True)          # e.g. "agent-qr-01"
+    name: str
+    description: str
+    price_algo: float
+    category: str = Field(index=True)          # e.g. "qr", "weather", "market"
+    endpoint: str
+    reputation: int                            # 90-99 seller score
+    is_verified: bool = True
 
 class AgentCallRequest(SQLModel):
     """Body for POST /agent/{id}/call — the buyer describing the task it wants."""
@@ -567,9 +579,15 @@ class WalletSettingsSaveResponse(BaseModel):
 
 
 class HealthResponse(BaseModel):
-    """Deep health snapshot returned by GET /health."""
+    """Deep health snapshot returned by GET /health.
+
+    `status` is the simple liveness flag the frontend polls for ("ok" whenever
+    the process is responding); `health` carries the deeper verdict
+    ("healthy" | "degraded") derived from subsystem checks.
+    """
     model_config = _CAMEL
-    status: str
+    status: str                     # "ok" — process is up (frontend contract)
+    health: str                     # "healthy" | "degraded"
     service: str
     version: str
     network: str
