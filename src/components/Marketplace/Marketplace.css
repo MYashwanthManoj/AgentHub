@@ -51,6 +51,37 @@
   color: var(--text-muted);
 }
 
+/* Price sort dropdown */
+.marketplace__sort-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.marketplace__sort-select {
+  width: 190px;
+  padding: 10px 34px 10px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235e6a7d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.marketplace__sort-select option {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+  .marketplace__sort-select {
+    width: 160px;
+  }
+}
+
 /* Grid */
 .marketplace__grid {
   display: grid;

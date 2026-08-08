@@ -156,7 +156,10 @@ function scoreAgent(agent: SellerAgent, tokens: string[]): number {
     .toLowerCase();
 
   for (const token of tokens) {
-    if (agent.keywords.includes(token)) score += 3;
+    // Exact category match ranks first — typing a category name (e.g. "chart"
+    // or "security") surfaces every agent in that category.
+    if (token === agent.category) score += 5;
+    else if (agent.keywords.includes(token)) score += 3;
     else if (searchTarget.includes(token)) score += 1;
   }
 

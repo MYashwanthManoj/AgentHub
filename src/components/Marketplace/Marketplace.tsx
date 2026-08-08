@@ -13,6 +13,9 @@ import { RegisterAgentModal } from './RegisterAgentModal';
 import type { SellerAgent } from '../../types';
 import './Marketplace.css';
 
+/** Price ordering applied on top of search/filter results. */
+type PriceSort = 'none' | 'price-asc' | 'price-desc';
+
 interface MarketplaceProps {
   selectedSeller: SellerAgent | null;
   onSellerSelect: (seller: SellerAgent) => void;
@@ -38,15 +41,19 @@ export function Marketplace({
   agentUsage,
 }: MarketplaceProps) {
   const [searchQuery, setSearchQuery] = useState('');
+  const [priceSort, setPriceSort] = useState<PriceSort>('none');
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   // Live registry (backend-hydrated, falls back to static seed offline).
   const agents = useRegistry();
 
   const displayedAgents = useMemo(() => {
-    if (searchQuery.trim()) return searchRegistry(searchQuery);
-    return agents;
-  }, [searchQuery, agents]);
+    // Copy before sorting — never mutate the shared registry snapshot.
+    const base = searchQuery.trim() ? searchRegistry(searchQuery) : [...agents];
+    if (priceSort === 'price-asc') base.sort((a, b) => a.priceAlgo - b.priceAlgo);
+    else if (priceSort === 'price-desc') base.sort((a, b) => b.priceAlgo - a.priceAlgo);
+    return base;
+  }, [searchQuery, agents, priceSort]);
 
   // Auto-route when task changes
   const routing = useMemo(() => {
@@ -109,6 +116,21 @@ export function Marketplace({
             </button>
           )}
         </div>
+
+        {/* Sort by price */}
+        <label className="marketplace__sort-wrap">
+          <span className="sr-only">Sort agents by price</span>
+          <select
+            className="input marketplace__sort-select"
+            value={priceSort}
+            onChange={(e) => setPriceSort(e.target.value as PriceSort)}
+            aria-label="Sort agents by price"
+          >
+            <option value="none">Sort: Default</option>
+            <option value="price-asc">Price: Low → High</option>
+            <option value="price-desc">Price: High → Low</option>
+          </select>
+        </label>
       </div>
 
       {/* Agent grid */}

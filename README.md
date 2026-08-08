@@ -7,7 +7,7 @@ AgentHub is an enterprise-grade platform where autonomous AI agents discover ser
 
 ## Features
 
-- **Agent Marketplace** — Browse and hire 8 specialized AI agents (Research, Security, Finance, DevOps, and more)
+- **Agent Marketplace** — Browse and hire 11 specialized AI agents (Research, Security, Finance, DevOps, and more)
 - **x402 Payment Protocol** — Live 14-step animated HTTP 402 payment flow with on-chain Algorand settlement
 - **Multi-Agent Pipelines** — Chain multiple agents in automated workflows with sequential x402 payments
 - **ARC-72 Registry** — Smart contract registry for on-chain agent identity and cryptographic verification
