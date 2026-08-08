@@ -4,7 +4,7 @@ services:
     name: agenthub-api
     runtime: python
     region: singapore
-    plan: free
+    plan: starter
     rootDir: .
     buildCommand: pip install -r backend/requirements.txt
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
@@ -22,13 +22,12 @@ services:
       - key: SELLER_ADDRESS
         value: LRJPYUELQTWYEDWVHZD5PAR7EZ7LPLWEXOSHOCZZNJX3Z4FQY5T2QOFYNY
       - key: SELLER_MNEMONIC
-        sync: false   # set this manually in Render dashboard (secret)
+        sync: false
 
   # ─── Frontend: React/Vite Static Site ──────────────────────────────────────
   - type: web
     name: agenthub-ui
     runtime: static
-    plan: free
     rootDir: .
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
