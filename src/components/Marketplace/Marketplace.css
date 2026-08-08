@@ -1,0 +1,175 @@
+.marketplace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.marketplace__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.marketplace__title {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Search */
+.marketplace__search-row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.marketplace__search-wrap {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.marketplace__search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.marketplace__search-input {
+  padding-left: 36px;
+  padding-right: 36px;
+}
+
+.marketplace__clear-btn {
+  position: absolute;
+  right: 4px;
+  padding: 4px 6px;
+  color: var(--text-muted);
+}
+
+/* Grid */
+.marketplace__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+/* Empty state */
+.marketplace__empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-6);
+  color: var(--text-muted);
+}
+
+.marketplace__empty-icon {
+  width: 34px;
+  height: 34px;
+}
+
+/* Task section */
+.marketplace__task-section {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.marketplace__task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.marketplace__task-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.marketplace__routing-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Demo quick-fill chips */
+.marketplace__demo-chips {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-2);
+}
+
+.marketplace__task-textarea {
+  resize: vertical;
+  min-height: 72px;
+  font-size: 13px;
+}
+
+.marketplace__task-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: -6px;
+}
+
+.marketplace__task-hint kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0 4px;
+}
+
+/* Actions */
+.marketplace__actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.marketplace__run-btn {
+  flex: 1;
+  min-width: 180px;
+  justify-content: center;
+  padding: var(--space-3) var(--space-5);
+  font-size: 14px;
+}
+
+.marketplace__multi-btn {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-5);
+  font-size: 14px;
+}
+
+/* Loading spinner on the Run Payment Flow button */
+.marketplace__spinner {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: currentColor;
+  animation: spin 800ms linear infinite;
+}
+
+.marketplace__spinner svg {
+  width: 15px;
+  height: 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketplace__spinner {
+    animation-duration: 1.6s;
+  }
+}

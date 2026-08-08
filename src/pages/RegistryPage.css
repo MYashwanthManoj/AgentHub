@@ -1,0 +1,163 @@
+/* ── Registry Page ─────────────────────────────────────────────────────────── */
+.registry-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.registry-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.registry-page__metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+/* Toolbar */
+.registry-page__toolbar {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.registry-page__search {
+  flex: 1;
+  min-width: 240px;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: var(--bg-base);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius);
+  padding: 0 var(--space-3);
+}
+
+.registry-page__search:focus-within {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.14);
+}
+
+.registry-page__search-icon {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.registry-page__search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  padding: var(--space-3) 0;
+}
+
+.registry-page__search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.registry-page__filters {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.registry-page__filter {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.registry-page__select {
+  width: 140px;
+  padding: var(--space-2) var(--space-3);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* Table */
+.registry-page__table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.registry-page__row {
+  cursor: pointer;
+}
+
+.registry-page__agent {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 13.5px;
+}
+
+.registry-page__agent-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--green-dim);
+  border: 1px solid var(--green-muted);
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+.registry-page__reputation {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.registry-page__star {
+  color: var(--amber);
+}
+
+.registry-page__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.registry-page__meta > .icon {
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+@media (max-width: 1000px) {
+  .registry-page__metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .registry-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .registry-page__metrics {
+    grid-template-columns: 1fr;
+  }
+}

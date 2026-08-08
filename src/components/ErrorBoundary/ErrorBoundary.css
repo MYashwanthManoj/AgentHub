@@ -1,0 +1,56 @@
+.error-boundary {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.error-boundary__card {
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  padding: var(--space-6);
+  border-color: var(--red-muted);
+}
+
+.error-boundary__icon {
+  display: inline-block;
+  font-size: 32px;
+  color: var(--red-bright);
+  margin-bottom: var(--space-2);
+}
+
+.error-boundary__title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-2);
+}
+
+.error-boundary__message {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 var(--space-4);
+}
+
+.error-boundary__detail {
+  font-size: 11px;
+  color: var(--red-bright);
+  background: var(--red-dim);
+  border: 1px solid var(--red-muted);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  margin: 0 0 var(--space-4);
+  text-align: left;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.error-boundary__actions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+}

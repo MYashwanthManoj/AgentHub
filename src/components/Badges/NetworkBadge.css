@@ -1,0 +1,49 @@
+/* NetworkBadge — network mode indicator pill. */
+
+.network-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  transition: all 200ms ease;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.network-badge__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: currentColor;
+}
+
+/* Simulated — amber, gently pulsing to signal a live sandbox */
+.network-badge--simulated {
+  background: var(--amber-dim);
+  border: 1px solid var(--amber-muted);
+  color: var(--amber);
+}
+.network-badge__dot--simulated {
+  animation: pulse-dot 1.6s ease infinite;
+}
+
+/* Testnet — blue */
+.network-badge--testnet {
+  background: var(--blue-muted);
+  border: 1px solid #2a4a7a;
+  color: var(--blue);
+}
+
+/* Mainnet — green */
+.network-badge--mainnet {
+  background: var(--green-dim);
+  border: 1px solid var(--green-muted);
+  color: var(--green);
+}

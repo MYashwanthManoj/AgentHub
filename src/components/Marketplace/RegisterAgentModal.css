@@ -1,0 +1,8 @@
+/* ── RegisterAgentModal CSS ───────────────────────────────────────────────── */
+.register-modal {
+  width: 100%;
+  max-width: 520px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}

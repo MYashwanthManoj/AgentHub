@@ -1,0 +1,506 @@
+/* ── Wallet Page ───────────────────────────────────────────────────────────── */
+.wallet-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.wallet-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.wallet-page__header-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* Connection banner */
+.wallet-page__connection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+
+.wallet-page__connection--ok {
+  border-color: var(--green-muted);
+  background: linear-gradient(90deg, var(--green-dim), transparent 70%), var(--bg-surface);
+}
+
+.wallet-page__connection--off {
+  border-color: var(--amber-muted);
+  background: var(--amber-dim);
+}
+
+.wallet-page__connection-copy {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.wallet-page__connection-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.wallet-page__connection-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.wallet-page__network-badge {
+  flex-shrink: 0;
+}
+
+/* Balance hero */
+.wallet-page__balance {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--space-6);
+}
+
+.wallet-page__balance-value {
+  font-family: var(--font-mono);
+  font-size: 40px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  color: var(--green);
+  line-height: 1.1;
+  margin-top: var(--space-2);
+}
+
+.wallet-page__balance-unit {
+  font-size: 16px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.wallet-page__balance-sub {
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: block;
+  margin-top: 4px;
+}
+
+.wallet-page__balance-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* Address */
+.wallet-page__address-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.wallet-page__address-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.wallet-page__address-code {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  overflow-x: auto;
+  white-space: nowrap;
+  display: block;
+}
+
+.wallet-page__address-notes {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Metrics */
+.wallet-page__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+/* Payments */
+.wallet-page__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.wallet-page__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--green);
+  text-decoration: none;
+}
+
+.wallet-page__payments {
+  list-style: none;
+}
+
+.wallet-page__payment {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.wallet-page__payment:last-child {
+  border-bottom: none;
+}
+
+.wallet-page__payment-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid var(--green-muted);
+  flex-shrink: 0;
+}
+
+.wallet-page__payment-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wallet-page__payment-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* Top Up CTA */
+.wallet-page__topup-btn {
+  box-shadow: 0 0 0 1px var(--green-muted), 0 4px 18px -6px rgba(0, 212, 170, 0.35);
+}
+
+/* Funding history */
+.wallet-page__funding {
+  list-style: none;
+}
+
+.wallet-page__funding-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.wallet-page__funding-row:last-child {
+  border-bottom: none;
+}
+
+.wallet-page__funding-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: var(--green-dim);
+  color: var(--green);
+  border: 1px solid var(--green-muted);
+  flex-shrink: 0;
+}
+
+.wallet-page__funding-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wallet-page__funding-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* ── Top Up modal ─────────────────────────────────────────────────────────── */
+.topup-modal {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
+  max-height: calc(100vh - 30vh);
+  overflow-y: auto;
+}
+
+.topup-modal__amounts {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+}
+
+.topup-chip {
+  padding: var(--space-2) 0;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius);
+  background: var(--bg-base);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.topup-chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.topup-chip--active {
+  border-color: var(--green);
+  color: var(--green);
+  background: var(--green-dim);
+  box-shadow: 0 0 0 1px var(--green-muted);
+}
+
+.topup-modal__custom {
+  max-width: 140px;
+}
+
+.topup-method {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius);
+  background: var(--bg-base);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.topup-method:hover {
+  border-color: var(--border-strong);
+}
+
+.topup-method--active {
+  border-color: var(--green);
+  background: var(--green-dim);
+}
+
+.topup-method__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.topup-method--active .topup-method__icon {
+  color: var(--green);
+  border-color: var(--green-muted);
+  background: var(--green-dim);
+}
+
+.topup-method__copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Confirming phase */
+.topup-modal__confirming {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+.topup-modal__confirming-amount {
+  font-family: var(--font-mono);
+  font-size: 30px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--green);
+  text-align: center;
+}
+
+.topup-modal__steps {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.topup-modal__steps li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.topup-modal__steps li.active {
+  color: var(--text-primary);
+}
+
+.topup-modal__steps li.done {
+  color: var(--green);
+}
+
+.topup-modal__step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--border-default);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.topup-modal__steps li.active .topup-modal__step-icon {
+  border-color: var(--green);
+  color: var(--green);
+  animation: pulse-dot 1.2s infinite;
+}
+
+.topup-modal__steps li.done .topup-modal__step-icon {
+  border-color: var(--green);
+  background: var(--green-dim);
+  color: var(--green);
+}
+
+.topup-modal__bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.topup-modal__bar-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 2px;
+  transition: width 0.4s var(--ease-out-expo);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Success phase */
+.topup-modal__success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+  padding: var(--space-4) 0 var(--space-2);
+}
+
+.topup-modal__success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--green-dim);
+  border: 1px solid var(--green);
+  color: var(--green);
+  box-shadow: var(--shadow-glow);
+  margin-bottom: var(--space-1);
+}
+
+.topup-modal__success-icon .icon {
+  animation: step-pop 0.24s var(--ease-out-expo) forwards;
+}
+
+/* Security note */
+.wallet-page__security {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+}
+
+.wallet-page__security > .icon {
+  color: var(--green);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .wallet-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .wallet-page__balance {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .wallet-page__balance-value {
+    font-size: 32px;
+  }
+  .wallet-page__metrics {
+    grid-template-columns: 1fr;
+  }
+  .wallet-page__address-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .wallet-page__payment-meta {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .wallet-page__funding-meta {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .wallet-page__balance-actions {
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,181 @@
+/* ── Automations Page ──────────────────────────────────────────────────────── */
+.automations-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.automations-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.automations-page__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.automations-page__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.automations-page__card--paused {
+  opacity: 0.65;
+}
+
+.automations-page__card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.automations-page__card-title {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.automations-page__card-title > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.automations-page__card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--green-dim);
+  border: 1px solid var(--green-muted);
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+/* Agent chain */
+.automations-page__chain {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-5);
+}
+
+.automations-page__chain-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.automations-page__chain-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  font-size: 12px;
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.automations-page__chain-node .icon {
+  color: var(--green);
+}
+
+.automations-page__chain-arrow {
+  color: var(--text-muted);
+}
+
+/* Meta grid */
+.automations-page__meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.automations-page__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.automations-page__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.automations-page__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.automations-page__demo-note {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: 1px dashed var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.automations-page__demo-note > .icon {
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+.automations-page__toast {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--green-dim);
+  border: 1px solid var(--green-muted);
+  color: var(--green);
+  border-radius: var(--radius);
+  font-size: 13px;
+  z-index: 60;
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 900px) {
+  .automations-page__grid {
+    grid-template-columns: 1fr;
+  }
+  .automations-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .automations-page__meta {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

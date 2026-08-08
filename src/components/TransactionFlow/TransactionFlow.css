@@ -1,0 +1,322 @@
+.tx-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Header */
+.tx-flow__header {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tx-flow__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tx-flow__title {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.tx-flow__live-badge {
+  font-size: 10px;
+}
+
+/* Progress bar */
+.tx-flow__progress-wrap {
+  height: 2px;
+  background: var(--border-subtle);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.tx-flow__progress-bar {
+  height: 100%;
+  background: var(--green);
+  transition: width 400ms ease;
+}
+
+.tx-flow__progress-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Steps */
+.tx-flow__steps {
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+/* Idle state */
+.tx-flow__idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+}
+
+.tx-flow__idle-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.tx-flow__idle-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 300px;
+  line-height: 1.6;
+}
+
+.tx-flow__idle-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-self: stretch;
+  text-align: left;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+}
+
+.tx-flow__idle-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Step rows */
+.flow-step {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  transition: opacity var(--transition-normal), border-color var(--transition-normal);
+}
+
+.flow-step--pending .flow-step__label { color: var(--text-muted); }
+.flow-step--active  .flow-step__label { color: var(--amber); }
+.flow-step--done    .flow-step__label { color: var(--text-primary); }
+.flow-step--error   .flow-step__label { color: var(--red); }
+
+/* Step state polish */
+.flow-step--pending {
+  opacity: 0.38;
+}
+.flow-step--active {
+  border-left: 2px solid var(--amber);
+  padding-left: 10px;
+  opacity: 1;
+}
+
+/* Track (dot + connector) */
+.flow-step__track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding-top: 5px;
+}
+
+.flow-step__connector {
+  width: 1px;
+  flex: 1;
+  background: var(--border-subtle);
+  margin-top: 4px;
+  min-height: 12px;
+}
+
+.flow-step:last-child .flow-step__connector {
+  display: none;
+}
+
+/* Content */
+.flow-step__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-bottom: var(--space-3);
+}
+
+.flow-step__top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.flow-step__label {
+  font-size: 13px;
+  font-weight: 500;
+  transition: color var(--transition-normal);
+}
+
+.flow-step__badges {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.flow-step__http-badge {
+  font-size: 10px;
+  padding: 1px 6px;
+}
+
+.flow-step__ts {
+  white-space: nowrap;
+}
+
+.flow-step__detail {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+.flow-step__hash {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  align-self: flex-start;
+}
+
+.flow-step__hash-label {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.flow-step__hash-value {
+  font-size: 11px;
+  color: var(--green);
+}
+
+/* Result wrap */
+.tx-flow__result-wrap {
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* Result skeleton — mirrors the ResultPanel layout while the flow runs */
+.tx-flow__skel-title {
+  display: block;
+  width: 96px;
+  height: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.tx-flow__skel-badge {
+  display: block;
+  width: 64px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+}
+
+.tx-flow__skel-line {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-3);
+}
+
+.tx-flow__skel-line--short { width: 72%; }
+.tx-flow__skel-line--shorter { width: 46%; margin-bottom: 0; }
+
+/* Success flash — brief green burst + check pop on payment completion */
+.tx-flow__flash {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 5;
+  animation: flash-success 1.5s ease-out forwards;
+}
+
+.tx-flow__flash-burst {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 38%,
+    rgba(0, 212, 170, 0.28),
+    rgba(0, 212, 170, 0.08) 45%,
+    transparent 72%
+  );
+  animation: flash-fade 1.5s ease-out forwards;
+}
+
+.tx-flow__flash-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--text-inverse);
+  font-size: 22px;
+  font-weight: 700;
+  box-shadow:
+    0 0 0 6px rgba(0, 212, 170, 0.25),
+    0 4px 16px rgba(0, 212, 170, 0.35);
+  animation: flash-check-pop 1.5s ease-out forwards;
+}
+
+@keyframes flash-success {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes flash-fade {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes flash-check-pop {
+  0%   { opacity: 0; transform: scale(0.5); }
+  16%  { opacity: 1; transform: scale(1.1); }
+  28%  { transform: scale(1); }
+  78%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.92) translateY(-8px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tx-flow__flash { animation-duration: 0.4s; }
+  .tx-flow__flash-burst { animation-duration: 0.4s; }
+  .tx-flow__flash-check { animation-duration: 0.4s; }
+}

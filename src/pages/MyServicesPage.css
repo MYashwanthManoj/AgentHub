@@ -1,0 +1,5 @@
+/* ── MyServicesPage CSS ────────────────────────────────────────────────────── */
+.my-services-page {
+  display: flex;
+  flex-direction: column;
+}

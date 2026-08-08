@@ -1,0 +1,22 @@
+/* ── LandingPage CSS ───────────────────────────────────────────────────────── */
+.landing-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-nav {
+  background: var(--bg-surface);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.landing-hero {
+  flex: 1;
+}
+
+.btn-lg {
+  padding: 12px 24px;
+  font-size: 16px;
+}

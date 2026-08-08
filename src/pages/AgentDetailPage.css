@@ -1,0 +1,194 @@
+/* ── Agent Detail / Service Detail Page ────────────────────────────────────── */
+.agent-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.agent-detail-page__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.agent-detail-page__crumb {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.agent-detail-page__crumb:hover {
+  color: var(--green);
+}
+
+/* Hero */
+.agent-detail-page__hero-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--green-dim);
+  border: 1px solid var(--green-muted);
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+.agent-detail-page__specs {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.agent-detail-page__specs > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Tabs */
+.agent-detail-page__tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  width: fit-content;
+  flex-wrap: wrap;
+}
+
+.agent-detail-page__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.agent-detail-page__tab:hover {
+  color: var(--text-primary);
+}
+
+.agent-detail-page__tab--active {
+  background: var(--green-dim);
+  border-color: var(--green-muted);
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* Playground */
+.agent-detail-page__playground {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.agent-detail-page__task {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.agent-detail-page__task-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: var(--space-3) 0;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.agent-detail-page__task-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.agent-detail-page__execute {
+  padding: var(--space-3);
+  font-size: 14px;
+  gap: var(--space-3);
+}
+
+.agent-detail-page__spinner {
+  display: inline-flex;
+}
+
+/* Code blocks */
+.agent-detail-page__code {
+  display: block;
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  overflow-x: auto;
+  line-height: 1.7;
+}
+
+.agent-detail-page__endpoint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+}
+
+.agent-detail-page__endpoint code {
+  flex: 1;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+/* SLA */
+.agent-detail-page__sla-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.agent-detail-page__sla-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.agent-detail-page__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+@media (max-width: 1000px) {
+  .agent-detail-page__playground {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .agent-detail-page__tabs {
+    width: 100%;
+  }
+}

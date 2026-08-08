@@ -1,0 +1,108 @@
+.multi-hop-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.multi-hop-panel__header {
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.multi-hop-panel__title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.multi-hop-panel__hops {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Hop card */
+.hop-card {
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  transition: background var(--transition-normal);
+  border-left: 2px solid transparent;
+}
+
+.hop-card:last-child {
+  border-bottom: none;
+}
+
+.hop-card--done    { border-left-color: var(--green); }
+.hop-card--running { border-left-color: var(--amber); background: var(--amber-dim); }
+.hop-card--error   { border-left-color: var(--red); }
+
+.hop-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.hop-card__hop-num {
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1px 6px;
+}
+
+.hop-card__seller {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.hop-card__task {
+  padding-left: 2px;
+}
+
+.hop-card__meta {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.hop-card__result {
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  line-height: 1.5;
+}
+
+/* Summary */
+.multi-hop-panel__summary {
+  padding: var(--space-3) var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--green-dim);
+}
+
+.multi-hop-panel__summary-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.multi-hop-panel__summary-value {
+  font-size: 15px;
+  font-weight: 600;
+}

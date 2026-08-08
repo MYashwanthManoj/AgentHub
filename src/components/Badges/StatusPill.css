@@ -1,0 +1,65 @@
+/* StatusPill — color-coded status indicator. */
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.status-pill__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.status-pill--green {
+  background: var(--green-dim);
+  border: 1px solid var(--green-muted);
+  color: var(--green);
+}
+.status-pill--amber {
+  background: var(--amber-dim);
+  border: 1px solid var(--amber-muted);
+  color: var(--amber);
+}
+.status-pill--red {
+  background: var(--red-dim);
+  border: 1px solid var(--red-muted);
+  color: var(--red);
+}
+.status-pill--pending {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+
+.status-pill__dot--green   { background: var(--green); }
+.status-pill__dot--amber   { background: var(--amber); animation: pulse-dot 1s ease infinite; }
+.status-pill__dot--red     { background: var(--red); }
+.status-pill__dot--pending { background: var(--text-muted); }
+
+/* Value text — inline-block so the scale transform can animate. */
+.status-pill__value {
+  display: inline-block;
+}
+
+/* Pop-in pulse — opt-in via the .status-pill--pop modifier; re-triggered by
+   remounting the pill (see the key prop in ExplorerStatsBar). */
+.status-pill--pop .status-pill__value {
+  animation: stat-pop 300ms ease;
+}
+
+@keyframes stat-pop {
+  0%, 100% { transform: scale(1); }
+  40%      { transform: scale(1.1); }
+}

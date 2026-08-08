@@ -1,0 +1,303 @@
+/* ── Overview Dashboard ────────────────────────────────────────────────────── */
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Hero */
+.dashboard-page__hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--space-6);
+}
+
+.dashboard-page__hero-actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* Status strip */
+.dashboard-page__status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  flex-wrap: wrap;
+}
+
+.dashboard-page__status-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Metrics */
+.dashboard-page__metrics {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-3);
+}
+
+.dashboard-page__metric {
+  padding: var(--space-4);
+}
+
+.dashboard-page__metric-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.dashboard-page__metric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+
+/* Grid panels */
+.dashboard-page__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+.dashboard-page__grid--bottom {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.dashboard-page__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.dashboard-page__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--green);
+  text-decoration: none;
+}
+
+.dashboard-page__link:hover {
+  text-decoration: underline;
+}
+
+/* Activity list */
+.dashboard-page__activity,
+.dashboard-page__txlist {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-page__activity-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dashboard-page__activity-item:last-child,
+.dashboard-page__txitem:last-child {
+  border-bottom: none;
+}
+
+.dashboard-page__activity-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-page__activity-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.dashboard-page__txitem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.dashboard-page__tx-main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dashboard-page__tx-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+/* Volume chart */
+.dashboard-page__volume-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 120px;
+  padding-top: var(--space-2);
+}
+
+.dashboard-page__volume-col {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.dashboard-page__volume-bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, var(--green-bright), var(--green));
+  opacity: 0.85;
+  min-height: 4px;
+  transition: opacity var(--transition-fast);
+}
+
+.dashboard-page__volume-bar:hover {
+  opacity: 1;
+}
+
+.dashboard-page__volume-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+}
+
+/* Usage bars */
+.dashboard-page__usage {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.dashboard-page__usage-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.dashboard-page__usage-track {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.dashboard-page__usage-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--green);
+  transition: width 500ms var(--ease-out-expo);
+}
+
+/* Services list */
+.dashboard-page__services {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-page__service {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-2);
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+.dashboard-page__service:hover {
+  background: var(--bg-elevated);
+}
+
+.dashboard-page__service-name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dashboard-page__service-name .icon {
+  color: var(--text-muted);
+}
+
+/* Wallet strip */
+.dashboard-page__wallet {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, var(--green-dim), transparent 60%), var(--bg-surface);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .dashboard-page__metrics {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .dashboard-page__grid--bottom {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-page__hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dashboard-page__grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-page__grid--bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-page__metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dashboard-page__wallet {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,169 @@
+/* ── Webhooks Page ─────────────────────────────────────────────────────────── */
+.webhooks-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.webhooks-page__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.webhooks-page__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.webhooks-page__endpoints {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.webhooks-page__endpoint--disabled {
+  opacity: 0.6;
+}
+
+.webhooks-page__endpoint-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.webhooks-page__endpoint-title {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.webhooks-page__endpoint-icon {
+  color: var(--green);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+.webhooks-page__url {
+  display: block;
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-base);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  margin-top: var(--space-2);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.webhooks-page__endpoint-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.webhooks-page__events {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.webhooks-page__events-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.webhooks-page__event-chip {
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+
+.webhooks-page__endpoint-actions-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.webhooks-page__section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.webhooks-page__event-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.webhooks-page__event-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-base);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.webhooks-page__event-option:hover {
+  border-color: var(--border-strong);
+}
+
+.webhooks-page__event-option--selected {
+  background: var(--green-dim);
+  border-color: var(--green-muted);
+  color: var(--green);
+}
+
+.webhooks-page__toast {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--green-dim);
+  border: 1px solid var(--green-muted);
+  color: var(--green);
+  border-radius: var(--radius);
+  font-size: 13px;
+  z-index: 60;
+  box-shadow: var(--shadow-md);
+}
+
+@media (max-width: 768px) {
+  .webhooks-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .webhooks-page__metrics {
+    grid-template-columns: 1fr;
+  }
+  .webhooks-page__endpoint-head {
+    flex-direction: column;
+  }
+}

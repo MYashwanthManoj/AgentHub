@@ -1,0 +1,106 @@
+/* ExplorerStatsBar — network statistics strip above the marketplace. */
+
+.explorer-stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  padding: var(--space-4) var(--space-6);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-6);
+  animation: fadeIn 300ms ease forwards;
+}
+
+/* Identity */
+.explorer-stats-bar__identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-shrink: 0;
+}
+
+.explorer-stats-bar__title-group {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.explorer-stats-bar__eyebrow {
+  font-size: 10px;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.explorer-stats-bar__title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+/* Stats */
+.explorer-stats-bar__stats {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.explorer-stats-bar__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 96px;
+}
+
+.explorer-stats-bar__stat + .explorer-stats-bar__stat {
+  border-left: 1px solid var(--border-subtle);
+  padding-left: var(--space-6);
+}
+
+.explorer-stats-bar__stat-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.explorer-stats-bar__stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Health */
+.explorer-stats-bar__health {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .explorer-stats-bar {
+    justify-content: flex-start;
+  }
+  .explorer-stats-bar__stats {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .explorer-stats-bar__stat + .explorer-stats-bar__stat {
+    border-left: none;
+    padding-left: 0;
+  }
+  .explorer-stats-bar__health {
+    margin-left: auto;
+  }
+}
