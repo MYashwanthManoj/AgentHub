@@ -20,7 +20,7 @@ import random
 from typing import Literal, Optional
 
 
-AgentCategory = Literal["summarizer", "chart", "lookup", "orchestrator"]
+AgentCategory = Literal["summarizer", "chart", "lookup", "orchestrator", "translator", "weather"]
 
 # ─── LLM configuration (read at call time so .env changes take effect) ───────
 OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
@@ -44,6 +44,10 @@ def execute_task(category: AgentCategory, task: str) -> dict:
         return _execute_chart(task)
     elif category == "lookup":
         return _execute_lookup(task)
+    elif category == "translator":
+        return _execute_translator(task)
+    elif category == "weather":
+        return _execute_weather(task)
     else:
         return {
             "result_type": "text",
@@ -231,4 +235,127 @@ def _execute_lookup(task: str) -> dict:
     return {
         "result_type": "json",
         "content": json.dumps(entities["default"], indent=2),
+    }
+
+
+# ─── Translator: real MyMemory API (free, no key) with graceful fallback ─────
+
+_LANG_CODES = {
+    "spanish": "es", "japanese": "ja", "french": "fr", "german": "de",
+    "italian": "it", "portuguese": "pt", "chinese": "zh", "korean": "ko",
+    "russian": "ru", "hindi": "hi", "arabic": "ar", "dutch": "nl",
+    "tamil": "ta", "telugu": "te", "bengali": "bn", "turkish": "tr",
+    "vietnamese": "vi", "thai": "th", "indonesian": "id", "malay": "ms",
+    "finnish": "fi", "swedish": "sv", "norwegian": "no", "danish": "da",
+    "polish": "pl", "ukrainian": "uk", "greek": "el", "czech": "cs",
+    "romanian": "ro", "hungarian": "hu",
+}
+
+def _extract_target_language(task: str) -> str:
+    """
+    Sniff the destination language from the task.
+    Handles 'translate X to Spanish', 'into Japanese', or a bare language name.
+    """
+    import re
+
+    match = re.search(r"\b(?:to|into)\s+([a-z]+)\b", task.lower())
+    if match:
+        return match.group(1).strip()
+    for lang in _LANG_CODES:
+        if lang in task.lower():
+            return lang
+    return "spanish"
+
+
+def _execute_translator(task: str) -> dict:
+    """Translate via MyMemory (free, no API key). Falls back gracefully on failure."""
+    import re
+
+    lang = _extract_target_language(task)
+    lang_code = _LANG_CODES.get(lang, "es")
+    text = re.sub(r"^(?:please\s+)?(?:translate|convert|locali[sz]e)\s*", "", task, flags=re.I).strip()
+    text = re.sub(r"\s+(?:to|into)\s+[a-z]+\s*$", "", text, flags=re.I).strip()
+    if not text:
+        text = task
+
+    try:
+        import httpx
+
+        with httpx.Client(timeout=10.0) as client:
+            resp = client.get(
+                "https://api.mymemory.translated.net/get",
+                params={"q": text, "langpair": f"en|{lang_code}"},
+            )
+            resp.raise_for_status()
+            translated = resp.json().get("responseData", {}).get("translatedText", "")
+
+        if translated and translated.strip() and "NO QUERY" not in translated.upper():
+            return {
+                "result_type": "text",
+                "content": (
+                    f"🌐 Translation ({lang}):\n"
+                    f"\"{translated.strip()}\"\n"
+                    f"──── Original: \"{text}\"\n"
+                    f"🤖 Translator Agent hired via x402 · Paid 0.05 ALGO on Algorand"
+                ),
+            }
+    except Exception as exc:  # noqa: BLE001 — demo must never crash on API errors
+        print(f"[task_executor] MyMemory translation failed: {exc}")
+
+    return {
+        "result_type": "text",
+        "content": (
+            f"Translation to {lang} temporarily unavailable (MyMemory API offline).\n"
+            f"Original: \"{text}\"\n🤖 Paid 0.05 ALGO via x402 on Algorand"
+        ),
+    }
+
+
+# ─── Weather: live wttr.in conditions with graceful fallback ────────────────
+
+def _execute_weather(task: str) -> dict:
+    """Fetch live weather from wttr.in for the extracted city."""
+    import re
+    from urllib.parse import quote
+
+    city = re.sub(
+        r"^(?:(?:in|for|at)\s+|(?:(?:what(?:'s|\s+is|\s+are)??|how(?:\s+is|\s+are|'s)??)\s+the\s+weather|weather)(?:\s+like)?(?:\s+(?:in|for|at))?)\s*",
+        "",
+        task,
+        flags=re.I,
+    ).strip() or "London"
+
+    try:
+        import httpx
+
+        with httpx.Client(timeout=10.0) as client:
+            resp = client.get(f"https://wttr.in/{quote(city)}?format=j1")
+            resp.raise_for_status()
+            cur = resp.json().get("current_condition", [{}])[0]
+
+        temp_c = cur.get("temp_C")
+        if temp_c is not None:
+            desc = cur.get("weatherDesc", [{}])[0].get("value", "n/a")
+            return {
+                "result_type": "text",
+                "content": (
+                    f"🌤️ Weather Report: {city.title()}\n"
+                    f"─────────────────────────────\n"
+                    f"🌡️ Temperature: {temp_c}°C / {cur.get('temp_F')}°F\n"
+                    f"💧 Humidity:    {cur.get('humidity')}%\n"
+                    f"💨 Wind:        {cur.get('windspeedKmph')} km/h\n"
+                    f"☁️ Condition:   {desc}\n"
+                    f"─────────────────────────────\n"
+                    f"🤖 Weather Agent hired via x402 · Paid 0.02 ALGO on Algorand"
+                ),
+            }
+    except Exception as exc:  # noqa: BLE001 — demo must never crash on API errors
+        print(f"[task_executor] wttr.in failed: {exc}")
+
+    return {
+        "result_type": "text",
+        "content": (
+            f"🌤️ Weather for {city.title()}: unable to fetch live data "
+            f"(wttr.in unavailable). Paid 0.02 ALGO via x402 on Algorand"
+        ),
     }

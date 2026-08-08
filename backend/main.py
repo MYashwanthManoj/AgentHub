@@ -23,16 +23,21 @@ Endpoints:
 """
 
 import os
+import time
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from backend.db import create_db_and_tables, engine
 from backend.seed import seed_demo_data
+from backend.models.schemas import LedgerEntry
+from backend.routers.registry import AGENTS
 from backend.routers import registry, agents, payment, ledger, websocket, keys, webhooks, automations, wallet
 
 load_dotenv()
+
+STARTUP_TIME = time.time()
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
@@ -44,12 +49,15 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# CORS — allow localhost + any onrender.com subdomain
+# CORS — allow localhost + any onrender.com / vercel.app subdomain, and * for demo
 ALLOWED_ORIGINS = [
     FRONTEND_URL,
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:3000",
+    "https://*.vercel.app",
+    "https://*.onrender.com",
+    "*",  # last resort for the demo
 ]
 
 app.add_middleware(
@@ -92,9 +100,22 @@ async def on_startup():
 @app.get("/health")
 async def health():
     """Health check — used by frontend to detect if backend is available."""
+    agents_count = len(AGENTS)
+    transactions_count = 0
+    database_status = "connected"
+    try:
+        with Session(engine) as session:
+            transactions_count = len(session.exec(select(LedgerEntry)).all())
+    except Exception as exc:  # noqa: BLE001 — never crash the health check
+        print(f"[health] ledger count failed ({exc})")
+        database_status = "error"
+
     return {
-        "status": "ok",
-        "service": "AgentHub API",
+        "status": "healthy",
         "version": "1.0.0",
-        "network": "algorand-testnet",
+        "agents_count": agents_count,
+        "transactions_count": transactions_count,
+        "database": database_status,
+        "uptime_seconds": int(time.time() - STARTUP_TIME),
+        "algorand_network": "testnet",
     }
