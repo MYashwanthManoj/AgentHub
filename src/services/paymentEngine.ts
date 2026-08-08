@@ -579,6 +579,20 @@ function generateMockResult(seller: SellerAgent, task: string): AgentResult {
         content: imageUrl,
       };
     }
+    case 'qr':
+      return {
+        agentId: seller.id,
+        resultType: 'image',
+        executionTimeMs,
+        content: `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(task)}&size=300x300`,
+      };
+    case 'weather':
+      return {
+        agentId: seller.id,
+        resultType: 'text',
+        executionTimeMs,
+        content: `🌤️ Weather data for "${task}" — Live API unavailable. Paid 0.02 ALGO via x402 on Algorand.`,
+      };
     default:
       return {
         agentId: seller.id,
