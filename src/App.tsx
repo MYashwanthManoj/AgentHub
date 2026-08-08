@@ -45,7 +45,7 @@ export function App() {
 
         {/* Enterprise App Dashboard Layout */}
         <Route path="/" element={<AppLayout />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route index element={<Navigate to="/landing" replace />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="marketplace" element={<MarketplacePage />} />
           <Route path="marketplace/:id" element={<AgentDetailPage />} />
@@ -61,7 +61,7 @@ export function App() {
           <Route path="docs" element={<DocumentationPage />} />
           <Route path="wallet" element={<WalletPage />} />
           <Route path="settings" element={<SettingsPage />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/landing" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
