@@ -16,6 +16,19 @@ import './Marketplace.css';
 /** Price ordering applied on top of search/filter results. */
 type PriceSort = 'none' | 'price-asc' | 'price-desc';
 
+/** Category filter pills — 'all' shows every agent. */
+const CATEGORY_FILTERS: Array<{ id: string; label: string }> = [
+  { id: 'all', label: 'All' },
+  { id: 'summarizer', label: 'Summarizer' },
+  { id: 'chart', label: 'Chart' },
+  { id: 'image', label: 'Image' },
+  { id: 'researcher', label: 'Research' },
+  { id: 'market', label: 'Market' },
+  { id: 'security', label: 'Security' },
+  { id: 'qr', label: 'QR' },
+  { id: 'weather', label: 'Weather' },
+];
+
 interface MarketplaceProps {
   selectedSeller: SellerAgent | null;
   onSellerSelect: (seller: SellerAgent) => void;
@@ -42,6 +55,7 @@ export function Marketplace({
 }: MarketplaceProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [priceSort, setPriceSort] = useState<PriceSort>('none');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   // Live registry (backend-hydrated, falls back to static seed offline).
@@ -50,10 +64,19 @@ export function Marketplace({
   const displayedAgents = useMemo(() => {
     // Copy before sorting — never mutate the shared registry snapshot.
     const base = searchQuery.trim() ? searchRegistry(searchQuery) : [...agents];
-    if (priceSort === 'price-asc') base.sort((a, b) => a.priceAlgo - b.priceAlgo);
-    else if (priceSort === 'price-desc') base.sort((a, b) => b.priceAlgo - a.priceAlgo);
-    return base;
-  }, [searchQuery, agents, priceSort]);
+    const categoryFiltered =
+      activeCategory === 'all' ? base : base.filter((a) => a.category === activeCategory);
+    if (priceSort === 'price-asc') categoryFiltered.sort((a, b) => a.priceAlgo - b.priceAlgo);
+    else if (priceSort === 'price-desc') categoryFiltered.sort((a, b) => b.priceAlgo - a.priceAlgo);
+    return categoryFiltered;
+  }, [searchQuery, agents, priceSort, activeCategory]);
+
+  // Per-category counts shown on the filter pills.
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const a of agents) counts[a.category] = (counts[a.category] ?? 0) + 1;
+    return counts;
+  }, [agents]);
 
   // Auto-route when task changes
   const routing = useMemo(() => {
@@ -133,6 +156,27 @@ export function Marketplace({
         </label>
       </div>
 
+      {/* Category filter pills */}
+      <div className="marketplace__filters" role="group" aria-label="Filter agents by category">
+        {CATEGORY_FILTERS.map((f) => {
+          const count = f.id === 'all' ? agents.length : (categoryCounts[f.id] ?? 0);
+          const isActive = activeCategory === f.id;
+          return (
+            <button
+              key={f.id}
+              type="button"
+              className={`marketplace__filter-pill${isActive ? ' marketplace__filter-pill--active' : ''}`}
+              onClick={() => setActiveCategory(f.id)}
+              aria-pressed={isActive}
+              disabled={count === 0}
+            >
+              {f.label}
+              <span className="marketplace__filter-count mono">{count}</span>
+            </button>
+          );
+        })}
+      </div>
+
       {/* Agent grid */}
       <div className="marketplace__grid">
         {displayedAgents.length > 0 ? (
@@ -149,7 +193,11 @@ export function Marketplace({
         ) : (
           <div className="marketplace__empty">
             <Icon name="search" size={18} className="marketplace__empty-icon" />
-            <p>No agents found for "{searchQuery}"</p>
+            <p>
+              {searchQuery.trim()
+                ? `No agents found for "${searchQuery}"`
+                : 'No agents in this category yet'}
+            </p>
           </div>
         )}
       </div>

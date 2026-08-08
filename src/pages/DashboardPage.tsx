@@ -8,7 +8,7 @@
  *  - per-agent usage and payment volume
  *  - active services with quick actions
  *
- * All metrics derive from the live registry + ledger — never fake numbers.
+ * All metrics derive from the live registry, ledger, and seed catalog — never fake numbers.
  * Every panel has a loading skeleton and an empty state.
  */
 
@@ -18,6 +18,7 @@ import { useLedger } from '../hooks/useLedger';
 import { useRegistry } from '../hooks/useRegistry';
 import { Icon } from '../components/Icon/Icon';
 import { StatusBadge } from '../components/ui/StatusBadge';
+import { SELLER_AGENTS } from '../data/agents';
 import { formatDuration, truncateHash } from '../utils/format';
 import './DashboardPage.css';
 
@@ -30,6 +31,9 @@ export function DashboardPage() {
     if (h < 18) return 'Good afternoon';
     return 'Good evening';
   });
+
+  // Catalog stats derived from the seed registry (never magic numbers).
+  const catalogValue = SELLER_AGENTS.reduce((sum, a) => sum + a.priceAlgo, 0);
 
   const confirmed = entries.filter((e) => e.status === 'confirmed').length;
   const failed = entries.filter((e) => e.status === 'failed').length;
@@ -106,9 +110,10 @@ export function DashboardPage() {
 
       {/* Metrics */}
       <div className="dashboard-page__metrics">
-        <MetricCard label="Agent Services" value={String(agents.length)} suffix="registered" icon="registry" />
+        <MetricCard label="Agent Services" value={String(SELLER_AGENTS.length)} suffix="in catalog" icon="registry" />
         <MetricCard label="Transactions" value={String(totalTransactions)} suffix="executed" icon="transactions" />
         <MetricCard label="ALGO Spent" value={totalSpent.toFixed(4)} suffix="ALGO" icon="dollar" green />
+        <MetricCard label="Catalog Value" value={catalogValue.toFixed(2)} suffix="ALGO · all agents" icon="hex" green />
         <MetricCard
           label="Success Rate"
           value={entries.length > 0 ? `${successRate.toFixed(1)}%` : '—'}
@@ -306,7 +311,7 @@ function MetricCard({ label, value, suffix, icon, green }: {
   label: string;
   value: string;
   suffix: string;
-  icon: 'registry' | 'transactions' | 'dollar' | 'activity' | 'clock';
+  icon: 'registry' | 'transactions' | 'dollar' | 'activity' | 'clock' | 'hex';
   green?: boolean;
 }) {
   return (

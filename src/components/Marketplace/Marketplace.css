@@ -82,6 +82,66 @@
   }
 }
 
+/* Category filter pills */
+.marketplace__filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.marketplace__filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  background: var(--bg-overlay);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.marketplace__filter-pill:hover:not(:disabled):not(.marketplace__filter-pill--active) {
+  color: var(--text-primary);
+  border-color: var(--border-default);
+  background: var(--bg-elevated);
+  transform: translateY(-1px);
+}
+
+.marketplace__filter-pill:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.marketplace__filter-pill--active {
+  color: var(--green);
+  background: var(--green-dim);
+  border-color: var(--green-muted);
+}
+
+.marketplace__filter-pill:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.marketplace__filter-pill:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+.marketplace__filter-count {
+  font-size: 10px;
+  opacity: 0.75;
+}
+
 /* Grid */
 .marketplace__grid {
   display: grid;

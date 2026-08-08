@@ -238,15 +238,23 @@ function ImageResult({ url }: { url: string }) {
       )}
 
       {!isError && (
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="result-image__download mono text-xs"
-          style={{ display: 'inline-block', marginTop: '10px', color: 'var(--color-accent, #818cf8)' }}
-        >
-          ↗ Open full image
-        </a>
+        <div className="result-image__actions">
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="result-image__action-link mono text-xs"
+          >
+            ↗ Open full image
+          </a>
+          <a
+            href={url}
+            download="agenthub-generated.png"
+            className="result-image__action-link result-image__action-link--download mono text-xs"
+          >
+            ⬇ Download
+          </a>
+        </div>
       )}
     </div>
   );
