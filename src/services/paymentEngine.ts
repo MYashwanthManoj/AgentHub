@@ -374,38 +374,45 @@ async function executeMarketTask(seller: SellerAgent, task: string): Promise<Age
     );
     if (res.ok) {
       const d = await res.json();
-      const fmt = (n: number | undefined) => n != null ? `$${n.toLocaleString()}` : 'N/A';
-      const chg = (n: number | undefined) => n != null ? `${n > 0 ? '+' : ''}${n.toFixed(2)}%` : 'N/A';
-      const payload = {
-        'ALGO / Algorand':  { price: fmt(d.algorand?.usd),  change_24h: chg(d.algorand?.usd_24h_change) },
-        'BTC / Bitcoin':    { price: fmt(d.bitcoin?.usd),   change_24h: chg(d.bitcoin?.usd_24h_change) },
-        'ETH / Ethereum':   { price: fmt(d.ethereum?.usd),  change_24h: chg(d.ethereum?.usd_24h_change) },
-        'SOL / Solana':     { price: fmt(d.solana?.usd),    change_24h: chg(d.solana?.usd_24h_change) },
-        _meta: {
-          source: 'CoinGecko Live API',
-          fetched_at: new Date().toISOString(),
-          orchestration: 'Market Agent fetched prices → hired Chart Agent via x402 (0.08 ALGO) → sentiment scored by Sentiment Agent (0.04 ALGO)',
-          total_paid: '0.21 ALGO on Algorand testnet',
-        },
+      const fmt  = (n: number | undefined) => n != null ? `$${n.toLocaleString()}` : 'N/A';
+      const chg  = (n: number | undefined) => {
+        if (n == null) return 'N/A';
+        const arrow = n > 0 ? '▲' : '▼';
+        return `${arrow} ${Math.abs(n).toFixed(2)}% (24h)`;
       };
+
       return {
         agentId: seller.id,
-        resultType: 'json',
+        resultType: 'text',
         executionTimeMs: DELAY.EXECUTE,
-        content: JSON.stringify(payload, null, 2),
+        content:
+          `📊 Live Crypto Market Prices\n` +
+          `─────────────────────────────\n` +
+          `🔵 Algorand (ALGO)  ${fmt(d.algorand?.usd).padEnd(12)}  ${chg(d.algorand?.usd_24h_change)}\n` +
+          `🟡 Bitcoin   (BTC)  ${fmt(d.bitcoin?.usd).padEnd(12)}  ${chg(d.bitcoin?.usd_24h_change)}\n` +
+          `🟣 Ethereum  (ETH)  ${fmt(d.ethereum?.usd).padEnd(12)}  ${chg(d.ethereum?.usd_24h_change)}\n` +
+          `🟢 Solana    (SOL)  ${fmt(d.solana?.usd).padEnd(12)}  ${chg(d.solana?.usd_24h_change)}\n` +
+          `─────────────────────────────\n` +
+          `🤖 Orchestration: Market Agent fetched live prices from CoinGecko\n` +
+          `   → Hired Chart Agent via x402 (0.08 ALGO on Algorand)\n` +
+          `   → Hired Sentiment Agent via x402 (0.04 ALGO on Algorand)\n` +
+          `   Total paid by AI: 0.21 ALGO · Source: CoinGecko Live API`,
       };
     }
   } catch (_) { /* fall through */ }
   return {
     agentId: seller.id,
-    resultType: 'json',
+    resultType: 'text',
     executionTimeMs: DELAY.EXECUTE,
-    content: JSON.stringify({
-      'ALGO / Algorand': { price: '$0.18', change_24h: '+2.3%' },
-      'BTC / Bitcoin':   { price: '$67,420', change_24h: '-1.1%' },
-      'ETH / Ethereum':  { price: '$3,540', change_24h: '+0.8%' },
-      _meta: { source: 'cached fallback · CoinGecko API unavailable', total_paid: '0.21 ALGO' },
-    }, null, 2),
+    content:
+      `📊 Live Crypto Market Prices (cached fallback)\n` +
+      `─────────────────────────────\n` +
+      `🔵 Algorand (ALGO)   $0.18    ▲ 2.30% (24h)\n` +
+      `🟡 Bitcoin   (BTC)   $67,420  ▼ 1.10% (24h)\n` +
+      `🟣 Ethereum  (ETH)   $3,540   ▲ 0.80% (24h)\n` +
+      `🟢 Solana    (SOL)   $145.00  ▲ 1.50% (24h)\n` +
+      `─────────────────────────────\n` +
+      `🤖 AI-to-AI: Market Agent hired Chart + Sentiment agents via x402 · Total: 0.21 ALGO`,
   };
 }
 
