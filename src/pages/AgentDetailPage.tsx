@@ -29,6 +29,17 @@ const TABS: Array<{ id: TabId; label: string; icon: IconName }> = [
   { id: 'transactions', label: 'Transactions', icon: 'transactions' },
 ];
 
+/** Smart task suggestions — example prompts specific to each agent category. */
+const TASK_PLACEHOLDERS: Record<string, string> = {
+  image: 'a futuristic robot trading on Algorand blockchain',
+  researcher: 'what is Algorand blockchain',
+  market: 'what is the price of bitcoin',
+  weather: 'weather in Mumbai',
+  qr: 'https://github.com/MYashwanthManoj/AgentHub',
+  translator: 'Hello world to Spanish',
+  summarizer: 'Paste your document here to summarize...',
+};
+
 export function AgentDetailPage() {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
@@ -144,7 +155,7 @@ export function AgentDetailPage() {
               rows={5}
               value={task}
               onChange={(e) => setTask(e.target.value)}
-              placeholder="Enter task description..."
+              placeholder={TASK_PLACEHOLDERS[agent.category] ?? 'Enter task description...'}
               aria-label="Task description"
             />
             <div className="agent-detail-page__task-meta">

@@ -341,6 +341,9 @@ export async function executeTask(seller: SellerAgent, task: string): Promise<Ag
     } catch(_) {}
     return { agentId: seller.id, resultType: 'text', executionTimeMs: DELAY.EXECUTE, content: `🌤️ Weather for ${city}: API unavailable. Paid 0.02 ALGO via x402.` };
   }
+  if (seller.category === 'translator') {
+    return executeTranslationTask(seller, task);
+  }
   // ────────────────────────────────────────────────────────────────────────
 
   return withFallback(
@@ -497,6 +500,48 @@ async function executeMarketTask(seller: SellerAgent, task: string): Promise<Age
   };
 }
 
+
+/** Scenario 3: Language Translator — live MyMemory API (free, no API key) */
+async function executeTranslationTask(seller: SellerAgent, task: string): Promise<AgentResult> {
+  try {
+    const match = task.match(/to\s+([a-z]+)/i);
+    const langName = match?.[1]?.toLowerCase() || 'spanish';
+    const langMap: Record<string, string> = {
+      spanish: 'es', french: 'fr', german: 'de', japanese: 'ja', chinese: 'zh', arabic: 'ar',
+      hindi: 'hi', portuguese: 'pt', russian: 'ru', italian: 'it', korean: 'ko', dutch: 'nl',
+    };
+    const langCode = langMap[langName] || 'es';
+    const textToTranslate = task.replace(/translate|to\s+\w+/gi, '').trim() || task;
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(textToTranslate)}&langpair=en|${langCode}`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const d = await res.json();
+      const translated = d.responseData?.translatedText;
+      if (translated) {
+        return {
+          agentId: seller.id,
+          resultType: 'text',
+          executionTimeMs: DELAY.EXECUTE,
+          content:
+            `🌐 Translation Result\n` +
+            `─────────────────────────────\n` +
+            `📝 Original:   ${textToTranslate}\n` +
+            `🔄 Translated: ${translated}\n` +
+            `🌍 Language:   ${langName.charAt(0).toUpperCase() + langName.slice(1)} (${langCode})\n` +
+            `─────────────────────────────\n` +
+            `🤖 Translator Agent · Paid 0.05 ALGO via x402 on Algorand`,
+        };
+      }
+    }
+  } catch (_) { /* fall through to unavailable result */ }
+
+  return {
+    agentId: seller.id,
+    resultType: 'text',
+    executionTimeMs: DELAY.EXECUTE,
+    content: `🌐 Translation unavailable for "${task}". Paid 0.05 ALGO via x402 · MyMemory API offline.`,
+  };
+}
 
 async function executeTaskLive(seller: SellerAgent, task: string): Promise<AgentResult> {
   const session = sessionStore.get(seller.id);

@@ -22,6 +22,7 @@ import { useMultiHopFlow } from '../hooks/useMultiHopFlow';
 import { useLedger } from '../hooks/useLedger';
 import { routeTask } from '../services/agentRouter';
 import { loadRegistry } from '../services/registryService';
+import { SELLER_AGENTS } from '../data/agents';
 import type { SellerAgent, LedgerEntry } from '../types';
 import './MarketplacePage.css';
 
@@ -129,7 +130,7 @@ export function MarketplacePage() {
           <div className="flex items-center gap-2">
             {[
               { id: 'overview', label: 'Agent Studio & Flow' },
-              { id: 'catalog', label: 'Full Agent Catalog (8)' },
+              { id: 'catalog', label: `Full Agent Catalog (${SELLER_AGENTS.length})` },
               { id: 'ledger', label: 'On-Chain Ledger' },
             ].map((tab) => (
               <button

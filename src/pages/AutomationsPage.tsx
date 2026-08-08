@@ -54,15 +54,16 @@ const SEED: Workflow[] = [
   {
     id: 'wf-1',
     name: 'Research Pipeline',
-    description: 'Compiles a weekly research digest from lookup, summarization, and charting agents.',
+    description: 'Compiles a weekly research digest from the Research Orchestrator, lookup, summarization, and charting agents.',
     trigger: 'Every 6 hours',
     triggerIcon: 'clock',
     agents: [
+      { id: 'agent-researcher-01', name: 'Research Orchestrator Agent', cost: 0.12 },
       { id: 'agent-lookup-01', name: 'Lookup Agent', cost: 0.03 },
       { id: 'agent-summarizer-01', name: 'Summarizer Agent', cost: 0.05 },
       { id: 'agent-chart-01', name: 'Chart Agent', cost: 0.08 },
     ],
-    estimatedCost: 0.16,
+    estimatedCost: 0.28,
     lastRun: '2 hours ago',
     nextRun: 'In 4 hours',
     status: 'active',
@@ -96,6 +97,24 @@ const SEED: Workflow[] = [
     nextRun: 'On next event',
     status: 'paused',
     runs: 43,
+  },
+  {
+    id: 'wf-4',
+    name: 'Media & Market Digest',
+    description: 'Pulls live crypto + weather data, renders a branded market image, and ships a scannable QR digest.',
+    trigger: 'Every 3 hours',
+    triggerIcon: 'sparkles',
+    agents: [
+      { id: 'agent-market-01', name: 'Market Intelligence Agent', cost: 0.09 },
+      { id: 'agent-weather-01', name: 'Weather Intelligence Agent', cost: 0.02 },
+      { id: 'agent-image-01', name: 'Image Generator Agent', cost: 0.10 },
+      { id: 'agent-qr-01', name: 'QR Code Generator Agent', cost: 0.03 },
+    ],
+    estimatedCost: 0.24,
+    lastRun: '35 min ago',
+    nextRun: 'In 2 hours',
+    status: 'active',
+    runs: 57,
   },
 ];
 

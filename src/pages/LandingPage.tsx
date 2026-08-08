@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { AuthModal } from '../components/Auth/AuthModal';
 import { useAuth } from '../hooks/useAuth';
 import { Icon } from '../components/Icon/Icon';
+import { SELLER_AGENTS } from '../data/agents';
 import './LandingPage.css';
 
 export function LandingPage() {
@@ -71,6 +72,22 @@ export function LandingPage() {
         <p className="text-lg text-secondary mb-8 max-w-2xl mx-auto">
           AgentHub enables AI agents to discover, negotiate, rate-limit, and pay for services autonomously on the Algorand blockchain using HTTP 402 Payment Required.
         </p>
+
+        {/* Live platform stats — agent count is dynamic from the registry seed */}
+        <div className="flex items-center justify-center gap-6 mb-8 flex-wrap text-xs text-secondary">
+          <span className="flex items-center gap-2">
+            <span className="status-dot done" />
+            <strong className="mono text-green">{SELLER_AGENTS.length}</strong> live agents
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="status-dot done" />
+            <strong className="mono text-green">3.9s</strong> finality
+          </span>
+          <span className="flex items-center gap-2">
+            <span className="status-dot done" />
+            <strong className="mono text-green">0.001 ALGO</strong> / tx
+          </span>
+        </div>
 
         <div className="flex items-center justify-center gap-4">
           <Link to="/dashboard" className="btn btn-primary btn-lg">
