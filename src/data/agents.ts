@@ -88,8 +88,7 @@ export const SELLER_AGENTS: SellerAgent[] = [
   {
     id: 'agent-translator-01',
     name: 'Language Translator Agent',
-    description:
-      'Provides high-speed neural translation across 50+ languages with technical domain term preservation.',
+    description: 'Provides high-speed neural translation across 50+ languages with technical domain term preservation.',
     priceAlgo: 0.05,
     reputation: 93,
     category: 'translator',
@@ -99,13 +98,32 @@ export const SELLER_AGENTS: SellerAgent[] = [
   {
     id: 'agent-image-01',
     name: 'Image Generator Agent',
-    description:
-      'Generates high-quality AI images from text prompts using diffusion models. Instant visual output, pay-per-image via x402.',
+    description: 'Generates high-quality AI images from text prompts using diffusion models. Instant visual output, pay-per-image via x402.',
     priceAlgo: 0.10,
     reputation: 96,
     category: 'image',
     endpoint: 'https://image.pollinations.ai/prompt',
     keywords: ['image', 'generate', 'picture', 'photo', 'art', 'draw', 'create', 'visual', 'diffusion', 'ai art'],
+  },
+  {
+    id: 'agent-researcher-01',
+    name: 'Research Orchestrator Agent',
+    description: 'Fetches real Wikipedia knowledge on any topic, then autonomously hires a Summarizer Agent via x402 to distill and structure the findings.',
+    priceAlgo: 0.12,
+    reputation: 97,
+    category: 'researcher',
+    endpoint: 'https://en.wikipedia.org/api/rest_v1/page/summary',
+    keywords: ['research', 'wikipedia', 'find', 'topic', 'information', 'knowledge', 'study', 'learn', 'explain'],
+  },
+  {
+    id: 'agent-market-01',
+    name: 'Market Intelligence Agent',
+    description: 'Fetches live crypto prices (ALGO, BTC, ETH, SOL) from CoinGecko, then hires a Chart Agent via x402 to visualize market trends.',
+    priceAlgo: 0.09,
+    reputation: 95,
+    category: 'market',
+    endpoint: 'https://api.coingecko.com/api/v3/simple/price',
+    keywords: ['crypto', 'price', 'market', 'algo', 'bitcoin', 'ethereum', 'solana', 'coin', 'trading', 'finance'],
   },
 ];
 
